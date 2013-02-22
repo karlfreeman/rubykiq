@@ -9,11 +9,24 @@
 [gemnasium]: https://gemnasium.com/karlfreeman/rubykiq
 [codeclimate]: https://codeclimate.com/github/karlfreeman/rubykiq
 
+[Sidekiq] agnostic enqueuing using Redis.
+
+[sidekiq]: http://mperham.github.com/sidekiq/
 
 ## Usage Examples
+Sidekiq is a fantastic message processing library which has a simple and stable message format. Rubykiq aims to be a portable library to push jobs in to Sidekiq with as little overhead as possible.
+
 ```ruby
 require 'rubykiq'
+
+# preview syntax
+Rubykiq.queue('my_queue').push(:class => 'MyWorker', :args => ['foo', 1, :bat => 'bar'])
+Rubykiq.push(:class => 'MyWorker', :args => ['foo', 1, :bat => 'bar']) # uses default queue
 ```
+
+##### It's advised that using [Sidekiq::Client's push] method is going to be better in most everyday cases
+
+[sidekiq::client's push]: https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/client.rb#L36
 
 ## Supported Ruby Versions
 This library aims to support and is [tested against][travis] the following Ruby

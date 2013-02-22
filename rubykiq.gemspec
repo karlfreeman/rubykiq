@@ -11,8 +11,8 @@ Gem::Specification.new do |gem|
   gem.version       = Rubykiq::VERSION
   gem.authors       = ['Karl Freeman']
   gem.email         = ['karlfreeman@gmail.com']
-  gem.description   = %q{Sidekiq agnostic enqueuing with just Redis}
-  gem.summary       = %q{Sidekiq agnostic enqueuing with just Redis}
+  gem.description   = %q{Sidekiq agnostic enqueuing using Redis}
+  gem.summary       = %q{Sidekiq agnostic enqueuing using Redis}
   gem.homepage      = 'https://github.com/karlfreeman/rubykiq'
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

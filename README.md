@@ -39,7 +39,6 @@ implementations:
 [jruby]: http://www.jruby.org/
 [rubinius]: http://rubini.us/
 
-
 # Credits
 
 Inspiration:

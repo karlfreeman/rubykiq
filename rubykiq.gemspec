@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.version       = Rubykiq::VERSION
   gem.authors       = ['Karl Freeman']
   gem.email         = ['karlfreeman@gmail.com']
+  gem.license       = 'MIT'
   gem.description   = %q{Sidekiq agnostic enqueuing using Redis}
   gem.summary       = %q{Sidekiq agnostic enqueuing using Redis}
   gem.homepage      = 'https://github.com/karlfreeman/rubykiq'

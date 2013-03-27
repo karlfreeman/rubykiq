@@ -1,12 +1,12 @@
 # Rubykiq ( WIP ) [![Gem Version](https://badge.fury.io/rb/rubykiq.png)][gem] [![Build Status](https://travis-ci.org/karlfreeman/rubykiq.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/karlfreeman/rubykiq.png?travis)][gemnasium] [![Coverage Status](https://coveralls.io/repos/karlfreeman/rubykiq/badge.png?branch=master)][coveralls] [![Code Climate](https://codeclimate.com/github/karlfreeman/rubykiq.png)][codeclimate]
 
+[Sidekiq] agnostic enqueuing using Redis.
+
 [gem]: https://rubygems.org/gems/rubykiq
 [travis]: http://travis-ci.org/karlfreeman/rubykiq
 [gemnasium]: https://gemnasium.com/karlfreeman/rubykiq
 [coveralls]: https://coveralls.io/r/karlfreeman/rubykiq
 [codeclimate]: https://codeclimate.com/github/karlfreeman/rubykiq
-
-[Sidekiq] agnostic enqueuing using Redis.
 
 [sidekiq]: http://mperham.github.com/sidekiq/
 

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rake'
+gem 'rake', '>= 1.2'
 gem 'yard'
 
 # platforms :ruby_18 do
@@ -18,7 +18,10 @@ end
 
 group :test do
   gem 'rspec'
+  gem 'vcr'
+  gem 'timecop'
   gem 'simplecov', :require => false
+  gem 'coveralls', :require => false
 end
 
 gemspec

@@ -3,9 +3,9 @@ $:.push File.expand_path("../lib", __FILE__)
 require "rubykiq/version"
 
 Gem::Specification.new do |gem|
-  gem.add_dependency "redis", "~> 3"
-  gem.add_dependency "redis-namespace"
-  gem.add_dependency "multi_json", "~> 1"
+  gem.add_dependency "redis", "~> 3.0"
+  gem.add_dependency "redis-namespace", "~> 1.0"
+  gem.add_dependency "multi_json", "~> 1.0"
   gem.add_development_dependency "bundler", "~> 1.0"
   gem.name          = "rubykiq"
   gem.version       = Rubykiq::VERSION

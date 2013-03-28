@@ -7,6 +7,7 @@ begin; require "awesome_print"; rescue LoadError; end
 require "rspec"
 
 require "support/pry"
+require "support/fakeredis"
 require "support/timecop"
 require "support/simplecov"
 

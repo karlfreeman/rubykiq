@@ -12,11 +12,11 @@ module Rubykiq
     #
     # @param options [Hash]
     def initialize(options = {})
+      return @connection if @connection
       url = options.delete(:url) { determine_redis_provider }
       namespace = options.delete(:namespace)
       driver = options.delete(:driver) { :ruby }
-      @connection = build_conection(url, namespace, driver)
-      return @connection
+      @connection ||= build_conection(url, namespace, driver)
     end
 
     private

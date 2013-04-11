@@ -25,19 +25,19 @@ describe Rubykiq::Client do
 
       context "without a class" do
         it "raises an ArgumentError" do
-          expect{ client.push(:args => ['foo', 1, :bat => 'bar']) }.to raise_error(ArgumentError, /Message must include a class/)
+          expect{ client.push(:args => ['foo', 1, { :bat => "bar" }]) }.to raise_error(ArgumentError, /Message must include a class/)
         end
       end
 
       context "with an incorrect args type" do
         it "raises an ArgumentError" do
-          expect{ client.push(:class => "MyWorker", :args => {:bat => 'bar'}) }.to raise_error(ArgumentError, /Message args must be an Array/)
+          expect{ client.push(:class => "MyWorker", :args => { :bat => "bar" }) }.to raise_error(ArgumentError, /Message args must be an Array/)
         end
       end
 
       context "with an incorrect class type" do
         it "raises an ArgumentError" do
-          expect{ client.push(:class => DummyClass, :args => ['foo', 1, :bat => 'bar']) }.to raise_error(ArgumentError, /Message class must be a String representation of the class name/)
+          expect{ client.push(:class => DummyClass, :args => ["foo", 1, { :bat => "bar" }]) }.to raise_error(ArgumentError, /Message class must be a String representation of the class name/)
         end
       end
 

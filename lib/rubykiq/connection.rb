@@ -13,7 +13,6 @@ module Rubykiq
     #
     # @param options [Hash]
     def initialize(options = {})
-      return @redis_connection if @redis_connection
       url = options.delete(:url) { determine_redis_provider }
       namespace = options.delete(:namespace)
       driver = options.delete(:driver) { :ruby }

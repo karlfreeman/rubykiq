@@ -31,7 +31,7 @@ module Rubykiq
     # @return [Rubykiq::Connection]
     def connection(options={})
       options = default_options.merge(valid_options).merge(options)
-      @connection ||= Rubykiq::Connection.new(options)
+      Rubykiq::Connection.new(options)
     end
 
     ##

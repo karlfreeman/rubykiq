@@ -28,7 +28,7 @@ module Rubykiq
       ENV["REDISTOGO_URL"] || ENV["REDIS_PROVIDER"] || ENV["REDIS_URL"] || "redis://localhost:6379/0"
     end
 
-    #
+    # construct a namespaced redis connection
     def build_conection(url, namespace, driver)
       client = ::Redis.connect(:url => url, :driver => driver)
       return ::Redis::Namespace.new(namespace, :redis => client)

@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module Rubykiq
 
   class Client
@@ -5,13 +7,17 @@ module Rubykiq
     # An array of valid keys in the options hash when configuring an {Rubykiq::Client}
     VALID_OPTIONS_KEYS = [
       :namespace,
-      :driver
+      :driver,
+      :retry,
+      :queue
     ].freeze
 
     # A hash of valid options and their default value's
     DEFAULT_OPTIONS = {
       :namespace => nil,
-      :driver => :ruby
+      :driver => :ruby,
+      :retry => true,
+      :queue => "default"
     }.freeze
 
     # Bang open the valid options
@@ -51,7 +57,8 @@ module Rubykiq
     # Example:
     #   Sidekiq::Client.push('queue' => 'my_queue', 'class' => MyWorker, 'args' => ['foo', 1, :bat => 'bar'])
     #
-    def push
+    def push(item)
+      normalized_item = normalize_item!(item)
       # normed = normalize_item(item)
       # payload = process_single(item['class'], normed)
 
@@ -59,8 +66,27 @@ module Rubykiq
       # pushed = raw_push([payload]) if payload
       # pushed ? payload['jid'] : nil
     end
+    alias_method :<<, :push
 
     private
+
+    def normalize_item!(item)
+      raise(ArgumentError, "Message must be a Hash of the form: { :class => SomeWorker, :args => ['bob', 1, :foo => 'bar'] }") unless item.is_a?(Hash)
+      raise(ArgumentError, "Message must include a class and set of arguments: #{item.inspect}") if !item[:class] || !item[:args]
+      raise(ArgumentError, "Message args must be an Array") unless item[:args].is_a?(Array)
+      raise(ArgumentError, "Message class must be a String representation of the class name") unless item[:class].is_a?(String)
+
+      # apply the default options
+      [:retry, :queue].each do |key|
+        item[key] = send("#{key}")
+      end
+
+      # include a job ID
+      item[:jid] = SecureRandom.hex(12)
+
+      return item
+
+    end
 
     # Create a hash of options and their values
     def valid_options

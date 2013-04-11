@@ -55,21 +55,23 @@ module Rubykiq
     # Returns nil if not pushed to Redis or a unique Job ID if pushed.
     #
     # Example:
-    #   Sidekiq::Client.push('queue' => 'my_queue', 'class' => MyWorker, 'args' => ['foo', 1, :bat => 'bar'])
+    #   Rubykiq::Client.push(:queue => 'my_queue', :class => "MyWorker", :args => ['foo', 1, :bat => 'bar'])
+    #   Rubykiq::Client.push(:queue => 'my_queue', :class => "MyWorker", :args => ['foo', 1, :bat => 'bar'])
     #
     def push(item)
-      normalized_item = normalize_item!(item)
+      item = normalize_item!(item)
       # normed = normalize_item(item)
       # payload = process_single(item['class'], normed)
 
       # pushed = false
       # pushed = raw_push([payload]) if payload
-      # pushed ? payload['jid'] : nil
+      # pushed ? item[:jid] : nil
     end
     alias_method :<<, :push
 
     private
 
+    #
     def normalize_item!(item)
       raise(ArgumentError, "Message must be a Hash of the form: { :class => SomeWorker, :args => ['bob', 1, :foo => 'bar'] }") unless item.is_a?(Hash)
       raise(ArgumentError, "Message must include a class and set of arguments: #{item.inspect}") if !item[:class] || !item[:args]
@@ -86,6 +88,24 @@ module Rubykiq
 
       return item
 
+    end
+
+    #
+    def raw_push(payloads)
+      pushed = false
+      # Rubykiq.redis do |conn|
+      #   if payloads.first['at']
+      #     pushed = conn.zadd('schedule', payloads.map {|hash| [hash['at'].to_s, Sidekiq.dump_json(hash)]})
+      #   else
+      #     q = payloads.first['queue']
+      #     to_push = payloads.map { |entry| Sidekiq.dump_json(entry) }
+      #     _, pushed = conn.multi do
+      #       conn.sadd('queues', q)
+      #       conn.lpush("queue:#{q}", to_push)
+      #     end
+      #   end
+      # end
+      pushed
     end
 
     # Create a hash of options and their values

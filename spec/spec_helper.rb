@@ -13,6 +13,13 @@ require "support/simplecov"
 
 require "rubykiq"
 
+# used as a stupid mixin class
+class DummyClass
+end
+
 #
 RSpec.configure do |config|
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
 end

@@ -55,38 +55,68 @@ module Rubykiq
     # Returns nil if not pushed to Redis or a unique Job ID if pushed.
     #
     # Example:
+    #   Rubykiq::Client.push(:queue => 'my_queue', :class => "MyWorker")
     #   Rubykiq::Client.push(:queue => 'my_queue', :class => "MyWorker", :args => ['foo', 1, :bat => 'bar'])
-    #   Rubykiq::Client.push(:queue => 'my_queue', :class => "MyWorker", :args => ['foo', 1, :bat => 'bar'])
+    #   Rubykiq::Client.push(:queue => 'my_queue', :class => "MyWorker", :args => [['foo'],['bar']])
     #
-    def push(item)
-      item = normalize_item!(item)
-      # normed = normalize_item(item)
-      # payload = process_single(item['class'], normed)
+    def push(items)
+      raise(ArgumentError, "Message must be a Hash") unless items.is_a?(Hash)
+      raise(ArgumentError, "Message args must be an Array") if items[:args] && !items[:args].is_a?(Array)
 
-      # pushed = false
-      # pushed = raw_push([payload]) if payload
-      # pushed ? item[:jid] : nil
+      # args are optional
+      items[:args] ||= []
+
+      # determine if this items args is an array of arrays
+      items[:args].first.is_a?(Array) ? push_many(items) : push_one(items)
+
     end
     alias_method :<<, :push
+
 
     private
 
     #
-    def normalize_item!(item)
-      raise(ArgumentError, "Message must be a Hash of the form: { :class => SomeWorker, :args => ['bob', 1, :foo => 'bar'] }") unless item.is_a?(Hash)
+    def push_one(item)
+      payload = normalize_item(item)
+      pushed = false
+      pushed = raw_push(payload) if payload
+      pushed ? payload[:jid] : nil
+    end
+
+    #
+    def push_many(items)
+      payloads = normalize_item(items)
+      payloads = items[:args].map do |args|
+        raise ArgumentError, "Bulk arguments must be an Array of Arrays: [[1], [2]]" unless args.is_a?(Array)
+        items.merge(:args => args)
+      end.compact
+      pushed = false
+      pushed = raw_push(payloads) unless payloads.empty?
+      pushed ? payloads.size : nil
+    end
+
+    #
+    def normalize_item(item)
+      raise(ArgumentError, "Message must be a Hash") unless item.is_a?(Hash)
       raise(ArgumentError, "Message must include a class and set of arguments: #{item.inspect}") if !item[:class] || !item[:args]
-      raise(ArgumentError, "Message args must be an Array") unless item[:args].is_a?(Array)
+      raise(ArgumentError, "Message args must be an Array") if item[:args] && !item[:args].is_a?(Array)
       raise(ArgumentError, "Message class must be a String representation of the class name") unless item[:class].is_a?(String)
+
+      # copy the item
+      pre_normalized_item = item.clone
+
+      # args are optional
+      pre_normalized_item[:args] ||= []
 
       # apply the default options
       [:retry, :queue].each do |key|
-        item[key] = send("#{key}")
+        pre_normalized_item[key] = send("#{key}")
       end
 
-      # include a job ID
-      item[:jid] = SecureRandom.hex(12)
+      # provide a job ID
+      pre_normalized_item[:jid] = SecureRandom.hex(12)
 
-      return item
+      return pre_normalized_item
 
     end
 

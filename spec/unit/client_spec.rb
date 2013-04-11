@@ -17,9 +17,9 @@ describe Rubykiq::Client do
 
       context "with an incorrect message type" do
         it "raises an ArgumentError" do
-          expect{ client.push([]) }.to raise_error(ArgumentError, /Message must be a Hash of the form/)
-          expect{ client.push("{}") }.to raise_error(ArgumentError, /Message must be a Hash of the form/)
-          expect{ client.push(DummyClass.new) }.to raise_error(ArgumentError, /Message must be a Hash of the form/)
+          expect{ client.push([]) }.to raise_error(ArgumentError, /Message must be a Hash/)
+          expect{ client.push("{}") }.to raise_error(ArgumentError, /Message must be a Hash/)
+          expect{ client.push(DummyClass.new) }.to raise_error(ArgumentError, /Message must be a Hash/)
         end
       end
 
@@ -39,6 +39,22 @@ describe Rubykiq::Client do
         it "raises an ArgumentError" do
           expect{ client.push(:class => DummyClass, :args => ["foo", 1, { :bat => "bar" }]) }.to raise_error(ArgumentError, /Message class must be a String representation of the class name/)
         end
+      end
+
+    end
+
+    context :singular do
+
+      it "should work" do
+        client.push(:class => "MyWorker", :args => [{:bat => "bar"}])
+      end
+
+    end
+
+    context :multiple do
+
+      it "should work" do
+        client.push(:class => "MyWorker", :args => [[{:bat => "bar"}],[{:bat => "foo"}]])
       end
 
     end

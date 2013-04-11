@@ -6,17 +6,20 @@ module Rubykiq
   class Connection
 
     extend Forwardable
-    def_delegator :@connection, :namespace
+    def_delegator :@redis_connection, :namespace
+    def_delegators :@redis_client, :host, :port, :db, :password
 
     # Initialize a new Connection object
     #
     # @param options [Hash]
     def initialize(options = {})
-      return @connection if @connection
+      return @redis_connection if @redis_connection
       url = options.delete(:url) { determine_redis_provider }
       namespace = options.delete(:namespace)
       driver = options.delete(:driver) { :ruby }
-      @connection ||= build_conection(url, namespace, driver)
+      @redis_connection ||= build_conection(url, namespace, driver)
+      @redis_client ||= @redis_connection.client
+      return @redis_connection
     end
 
     private

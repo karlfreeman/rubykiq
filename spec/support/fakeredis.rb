@@ -1,1 +1,0 @@
-require "fakeredis/rspec"

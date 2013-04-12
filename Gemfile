@@ -21,7 +21,6 @@ group :test do
   gem "rspec"
   gem "vcr"
   gem "timecop"
-  gem "fakeredis"
   gem "simplecov", :require => false
   gem "coveralls", :require => false
 end

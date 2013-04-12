@@ -45,16 +45,41 @@ describe Rubykiq::Client do
 
     context :singular do
 
+      before(:each) do
+        Rubykiq.connection.flushdb
+      end
+
       it "should work" do
-        client.push(:class => "MyWorker", :args => [{:bat => "bar"}])
+
+        expect {
+          client.push(:class => "MyWorker", :args => [{:bat => "bar"}])
+        }.to change{
+          Rubykiq.connection.llen("queue:default")
+        }.from(0).to(1)
+
+        # raw_job = Rubykiq.connection.lpop("queue:default")
+        # job = MultiJson.decode(raw_job, :symbolize_keys => true)
+
       end
 
     end
 
     context :multiple do
 
+      before(:each) do
+        Rubykiq.connection.flushdb
+      end
+
       it "should work" do
-        client.push(:class => "MyWorker", :args => [[{:bat => "bar"}],[{:bat => "foo"}]])
+        expect {
+          client.push(:class => "MyWorker", :args => [[{:bat => "bar"}],[{:bat => "foo"}]])
+        }.to change{
+          Rubykiq.connection.llen("queue:default")
+        }.from(0).to(2)
+
+        # raw_job = Rubykiq.connection.lpop("queue:default")
+        # job = MultiJson.decode(raw_job, :symbolize_keys => true)
+
       end
 
     end

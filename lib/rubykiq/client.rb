@@ -40,24 +40,6 @@ module Rubykiq
       Rubykiq::Connection.new(options)
     end
 
-    ##
-    # The main method used to push a job to Redis.  Accepts a number of options:
-    #
-    #   queue - the named queue to use, default 'default'
-    #   class - the worker class to call, required
-    #   args - an array of simple arguments to the perform method, must be JSON-serializable
-    #   retry - whether to retry this job if it fails, true or false, default true
-    #   backtrace - whether to save any error backtrace, default false
-    #
-    # All options must be strings, not symbols.  NB: because we are serializing to JSON, all
-    # symbols in 'args' will be converted to strings.
-    #
-    # Returns nil if not pushed to Redis or a unique Job ID if pushed.
-    #
-    # Example:
-    #   Rubykiq::Client.push(:queue => 'my_queue', :class => "MyWorker")
-    #   Rubykiq::Client.push(:queue => 'my_queue', :class => "MyWorker", :args => ['foo', 1, :bat => 'bar'])
-    #   Rubykiq::Client.push(:queue => 'my_queue', :class => "MyWorker", :args => [['foo'],['bar']])
     #
     def push(items)
       raise(ArgumentError, "Message must be a Hash") unless items.is_a?(Hash)
@@ -77,22 +59,36 @@ module Rubykiq
 
     #
     def push_one(item)
+
+      # we're expecting item to be a single item so simply normalize it
       payload = normalize_item(item)
+
+      #
       pushed = false
-      pushed = raw_push(payload) if payload
+      pushed = raw_push([payload]) if payload
       pushed ? payload[:jid] : nil
+
     end
 
     #
     def push_many(items)
-      payloads = normalize_item(items)
+
+      # we're expecting items to have an nested array of args, lets take each one and correctly normalize them
       payloads = items[:args].map do |args|
-        raise ArgumentError, "Bulk arguments must be an Array of Arrays: [[1], [2]]" unless args.is_a?(Array)
-        items.merge(:args => args)
+        raise ArgumentError, "Bulk arguments must be an Array of Arrays: [[:foo => 'bar'], [:foo => 'foo']]" unless args.is_a?(Array)
+        # clone the original items ( for :queue, :class, etc.. )
+        item = items.clone
+        # then merge this items args ( eg the nested arg array )
+        item.merge!(:args => args) unless args.empty?
+        # then normalize the item
+        item = normalize_item(item)
       end.compact
+
+      #
       pushed = false
       pushed = raw_push(payloads) unless payloads.empty?
       pushed ? payloads.size : nil
+
     end
 
     #
@@ -122,19 +118,18 @@ module Rubykiq
 
     #
     def raw_push(payloads)
+      # ap payloads
       pushed = false
-      # Rubykiq.redis do |conn|
-      #   if payloads.first['at']
-      #     pushed = conn.zadd('schedule', payloads.map {|hash| [hash['at'].to_s, Sidekiq.dump_json(hash)]})
-      #   else
-      #     q = payloads.first['queue']
-      #     to_push = payloads.map { |entry| Sidekiq.dump_json(entry) }
-      #     _, pushed = conn.multi do
-      #       conn.sadd('queues', q)
-      #       conn.lpush("queue:#{q}", to_push)
-      #     end
-      #   end
-      # end
+      if payloads.first[:at]
+        pushed = Rubykiq.connection.zadd("schedule", payloads.map {|hash| [ hash[:at].to_s, MultiJson.encode(hash) ]})
+      else
+        q = payloads.first[:queue]
+        to_push = payloads.map { |item| MultiJson.encode(item) }
+        _, pushed = Rubykiq.connection.multi do
+          Rubykiq.connection.sadd("queues", q)
+          Rubykiq.connection.lpush("queue:#{q}", to_push)
+        end
+      end
       pushed
     end
 

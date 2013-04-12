@@ -6,7 +6,7 @@ module Rubykiq
   class Connection
 
     extend Forwardable
-    def_delegator :@redis_connection, :namespace
+    def_delegators :@redis_connection, :multi, :sadd, :lpush, :get, :lpop, :llen, :flushdb, :namespace
     def_delegators :@redis_client, :host, :port, :db, :password
 
     # Initialize a new Connection object

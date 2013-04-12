@@ -1,4 +1,5 @@
 require 'securerandom'
+require 'multi_json'
 
 module Rubykiq
 
@@ -110,7 +111,7 @@ module Rubykiq
       end
 
       # provide a job ID
-      pre_normalized_item[:jid] = SecureRandom.hex(12)
+      pre_normalized_item[:jid] = ::SecureRandom.hex(12)
 
       return pre_normalized_item
 
@@ -121,10 +122,10 @@ module Rubykiq
       # ap payloads
       pushed = false
       if payloads.first[:at]
-        pushed = Rubykiq.connection.zadd("schedule", payloads.map {|hash| [ hash[:at].to_s, MultiJson.encode(hash) ]})
+        pushed = Rubykiq.connection.zadd("schedule", payloads.map {|hash| [ hash[:at].to_s, ::MultiJson.encode(hash) ]})
       else
         q = payloads.first[:queue]
-        to_push = payloads.map { |item| MultiJson.encode(item) }
+        to_push = payloads.map { |item| ::MultiJson.encode(item) }
         _, pushed = Rubykiq.connection.multi do
           Rubykiq.connection.sadd("queues", q)
           Rubykiq.connection.lpush("queue:#{q}", to_push)

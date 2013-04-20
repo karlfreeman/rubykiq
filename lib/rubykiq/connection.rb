@@ -15,7 +15,7 @@ module Rubykiq
     def initialize(options = {})
       url = options.delete(:url) { determine_redis_provider }
       namespace = options.delete(:namespace)
-      driver = options.delete(:driver) { :ruby }
+      driver = options.delete(:driver)
       @redis_connection ||= build_conection(url, namespace, driver)
       @redis_client ||= @redis_connection.client
       return @redis_connection

@@ -16,7 +16,6 @@ Sidekiq is a fantastic message processing library which has a simple and stable 
 ```ruby
 require 'rubykiq'
 
-# preview syntax
 Rubykiq.push(:class => 'MyWorker', :args => ['foo', 1, :bat => 'bar']) # uses default queue unless specified
 ```
 

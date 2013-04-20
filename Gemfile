@@ -19,6 +19,7 @@ end
 
 group :test do
   gem "rspec"
+  gem "rspec-smart-formatter"
   gem "vcr"
   gem "timecop"
   gem "simplecov", :require => false

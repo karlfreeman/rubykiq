@@ -24,16 +24,22 @@ Rubykiq.push(:class => 'MyWorker', :args => ['foo', 1, :bat => 'bar']) # uses de
 
 [sidekiq::client's push]: https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/client.rb#L36
 
+## Features
+
+* [Redis][] has support for [alternative drivers](https://github.com/redis/redis-rb#alternate-drivers), Rubykiq is tested with these in mind. ( eg em-synchrony )
+* Some minor safety / parsing around the `:at` parameter to support `Time`, `Date` and `String` timestamps
+
+[redis]: https://github.com/redis/redis-rb
+
 ## Supported Ruby Versions
 This library aims to support and is [tested against][travis] the following Ruby
 implementations:
 
-* Ruby 1.8.7
-* Ruby 1.9.2
-* Ruby 1.9.3
-* Ruby 2.0.0
-* [JRuby][]
-* [Rubinius][]
+* Ruby 1.9.2 (drivers: ruby, hiredis, synchrony)
+* Ruby 1.9.3 (drivers: ruby, hiredis, synchrony)
+* Ruby 2.0.0 (drivers: ruby, hiredis, synchrony)
+* [JRuby][] (drivers: ruby)
+* [Rubinius][] (drivers: ruby)
 
 [jruby]: http://www.jruby.org/
 [rubinius]: http://rubini.us/

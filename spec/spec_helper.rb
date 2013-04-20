@@ -22,3 +22,20 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+#
+def jruby?
+  defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby'
+end
+
+#
+def wrap_in_synchrony?(driver)
+
+  yield unless driver == :synchrony
+
+  EM.synchrony do
+    yield if block_given?
+    EM.stop
+  end
+
+end

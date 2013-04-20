@@ -17,4 +17,15 @@ describe Rubykiq do
     it { should be_kind_of(::ConnectionPool) }
   end
 
+  # for every valid option
+  Rubykiq::Client::VALID_OPTIONS_KEYS.each do |key|
+
+    describe key do
+      subject { Rubykiq }
+      it {should respond_to key }
+      it {should respond_to "#{key}=".to_sym }
+    end
+
+  end
+
 end

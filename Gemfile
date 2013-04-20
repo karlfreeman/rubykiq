@@ -3,6 +3,9 @@ source "https://rubygems.org"
 gem "rake", ">= 1.2"
 gem "yard"
 
+gem "hiredis", "~> 0.4.5", :require => false
+gem "em-synchrony", :require => false
+
 # platforms :ruby_18 do
 # end
 # platforms :ruby, :mswin, :mingw do

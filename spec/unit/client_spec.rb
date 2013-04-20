@@ -19,6 +19,7 @@ describe Rubykiq::Client do
   # eg with a variety of drivers
   [:ruby, :hiredis, :synchrony].each do |driver|
 
+    # skip incompatible drivers when running in JRuby
     next if jruby? && (driver == :hiredis || :synchrony)
 
     context "with #{driver}" do

@@ -2,6 +2,14 @@ require "spec_helper"
 
 describe Rubykiq::Client do
 
+  before(:all) do
+    Timecop.freeze
+  end
+
+  after(:all) do
+    Timecop.return
+  end
+
   describe :defaults do
     subject { Rubykiq::Client.new }
     its(:namespace) { should be_nil }
@@ -43,42 +51,47 @@ describe Rubykiq::Client do
 
     end
 
-    context :singular do
+    # eg singular and batch
+    args = [[{:bat => "bar"}],[[{:bat => "bar"}],[{:bat => "foo"}]]]
+    args.each do |args|
 
-      before(:each) do
-        Rubykiq.connection.flushdb
-      end
+      context "with args #{args}" do
 
-      it "should work" do
+        before(:each) do
+          Rubykiq.connection_pool do |connection|
+            connection.flushdb
+          end
+        end
 
-        expect {
-          client.push(:class => "MyWorker", :args => [{:bat => "bar"}])
-        }.to change{
-          Rubykiq.connection.llen("queue:default")
-        }.from(0).to(1)
+        it "should create #{args.length} job(s)" do
+          expect { client.push(:class => "MyWorker", :args => args) }.to change { Rubykiq.connection_pool do |connection| connection.llen("queue:default"); end }.from(0).to(args.length)
+          raw_jobs = Rubykiq.connection_pool do |connection| connection.lrange("queue:default", 0, args.length); end
+          raw_jobs.each do |job|
+            job = MultiJson.decode(job, :symbolize_keys => true)  
+            expect(job).to have_key(:jid)
+          end
+        end
 
-        # raw_job = Rubykiq.connection.lpop("queue:default")
-        # job = MultiJson.decode(raw_job, :symbolize_keys => true)
+        # eg with a variety of different time types
+        times = [ Time.now, DateTime.now, Time.now.utc.iso8601, Time.now.to_f ]
+        times.each do |time|
 
-      end
+          context "with time #{time} ( #{time.class} )" do
 
-    end
+            it "should create #{args.length} job(s)" do
+              expect { client.push(:class => "MyWorker", :args => args, :at => time) }.to change { Rubykiq.connection_pool do |connection| connection.zcard("schedule"); end }.from(0).to(args.length)
+              raw_jobs = Rubykiq.connection_pool do |connection| connection.zrange("schedule", 0, args.length); end
+              raw_jobs.each do |job|
+                job = MultiJson.decode(job, :symbolize_keys => true)  
+                expect(job).to have_key(:at)
+                expect(job[:at]).to be_within(1).of(Time.now.to_f)
+              end
+              
+            end
 
-    context :multiple do
+          end
 
-      before(:each) do
-        Rubykiq.connection.flushdb
-      end
-
-      it "should work" do
-        expect {
-          client.push(:class => "MyWorker", :args => [[{:bat => "bar"}],[{:bat => "foo"}]])
-        }.to change{
-          Rubykiq.connection.llen("queue:default")
-        }.from(0).to(2)
-
-        # raw_job = Rubykiq.connection.lpop("queue:default")
-        # job = MultiJson.decode(raw_job, :symbolize_keys => true)
+        end
 
       end
 

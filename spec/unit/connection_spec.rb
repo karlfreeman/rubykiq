@@ -14,16 +14,17 @@ describe Rubykiq::Connection do
   describe :options do
 
     context :custom do
-      subject { Rubykiq::Connection.new(:namespace => "yyyy") }
-      its(:namespace) { should eq "yyyy" }
+      subject { Rubykiq::Connection.new(:namespace => "yyy") }
+      its(:namespace) { should eq "yyy" }
     end
 
     context :inherited_settings do
-      subject {
-        Rubykiq.namespace = "xxx"
-        Rubykiq.connection
-      }
-      its(:namespace) { should eq "xxx" }
+      it "should work" do
+        client = Rubykiq::Client.new(:namespace => "xxx")
+        client.connection_pool do |connection|
+          expect(connection.namespace).to eq "xxx"
+        end
+      end
     end
 
   end

@@ -1,5 +1,7 @@
+require 'connection_pool'
 require 'securerandom'
 require 'multi_json'
+require 'time'
 
 module Rubykiq
 
@@ -7,6 +9,8 @@ module Rubykiq
 
     # An array of valid keys in the options hash when configuring an {Rubykiq::Client}
     VALID_OPTIONS_KEYS = [
+      :redis_pool_size,
+      :redis_pool_timeout,
       :namespace,
       :driver,
       :retry,
@@ -15,6 +19,8 @@ module Rubykiq
 
     # A hash of valid options and their default value's
     DEFAULT_OPTIONS = {
+      :redis_pool_size => 1,
+      :redis_pool_timeout => 1,
       :namespace => nil,
       :driver => :ruby,
       :retry => true,
@@ -28,17 +34,28 @@ module Rubykiq
     #
     # @param options [Hash]
     def initialize(options = {})
-      VALID_OPTIONS_KEYS.each do |key|
-        send("#{key}=", default_options[key])
+      reset_options
+      options.each_pair do |key, value|
+        send("#{key}=", value) if VALID_OPTIONS_KEYS.include?(key)
       end
     end
 
-    # Fetch the Rubykiq::Connection
+    # Fetch the ::ConnectionPool of Rubykiq::Connection's
     #
-    # @return [Rubykiq::Connection]
-    def connection(options={})
-      options = default_options.merge(valid_options).merge(options)
-      Rubykiq::Connection.new(options)
+    # @return [::ConnectionPool]
+    def connection_pool(options={}, &block)
+      options = valid_options.merge(options)
+
+      @connection_pool ||= ::ConnectionPool.new(:timeout => redis_pool_timeout, :size => redis_pool_size) do
+        Rubykiq::Connection.new(options)
+      end
+
+      if block_given?
+        @connection_pool.with(&block)
+      else
+        return @connection_pool
+      end
+
     end
 
     #
@@ -57,6 +74,23 @@ module Rubykiq
 
 
     private
+
+    # Create a hash of options and their values
+    def valid_options
+      VALID_OPTIONS_KEYS.inject({}){|o,k| o.merge!(k => send(k)) }
+    end
+
+    # Create a hash of the default options and their values
+    def default_options
+      DEFAULT_OPTIONS
+    end
+
+    # Set the VALID_OPTIONS_KEYS with their DEFAULT_OPTIONS
+    def reset_options
+      VALID_OPTIONS_KEYS.each do |key|
+        send("#{key}=", default_options[key])
+      end
+    end
 
     #
     def push_one(item)
@@ -93,11 +127,33 @@ module Rubykiq
     end
 
     #
+    def raw_push(payloads)
+      # ap payloads
+      pushed = false
+      Rubykiq.connection_pool do |connection|
+        if payloads.first[:at]
+          pushed = connection.zadd("schedule", payloads.map {|item| [ item[:at].to_s, ::MultiJson.encode(item) ]})
+        else
+          q = payloads.first[:queue]
+          to_push = payloads.map { |item| ::MultiJson.encode(item) }
+          _, pushed = connection.multi do
+            connection.sadd("queues", q)
+            connection.lpush("queue:#{q}", to_push)
+          end
+        end
+      end
+      pushed
+    end
+
+    #
     def normalize_item(item)
       raise(ArgumentError, "Message must be a Hash") unless item.is_a?(Hash)
       raise(ArgumentError, "Message must include a class and set of arguments: #{item.inspect}") if !item[:class] || !item[:args]
       raise(ArgumentError, "Message args must be an Array") if item[:args] && !item[:args].is_a?(Array)
       raise(ArgumentError, "Message class must be a String representation of the class name") unless item[:class].is_a?(String)
+
+      # normalize the time
+      item[:at] = normalize_time(item[:at]) if item[:at]
 
       # copy the item
       pre_normalized_item = item.clone
@@ -117,38 +173,23 @@ module Rubykiq
 
     end
 
-    #
-    def raw_push(payloads)
-      # ap payloads
-      pushed = false
-      if payloads.first[:at]
-        pushed = Rubykiq.connection.zadd("schedule", payloads.map {|hash| [ hash[:at].to_s, ::MultiJson.encode(hash) ]})
+    # Given an object meant to represent time, try to convert it inteligently to a float
+    def normalize_time(time)
+
+      # if the time param is a Date / String convert it to a Time
+      if time.is_a?(Date)
+        normalized_time = time.to_time
+      elsif time.is_a?(String)
+        normalized_time = Time.parse(time)
       else
-        q = payloads.first[:queue]
-        to_push = payloads.map { |item| ::MultiJson.encode(item) }
-        _, pushed = Rubykiq.connection.multi do
-          Rubykiq.connection.sadd("queues", q)
-          Rubykiq.connection.lpush("queue:#{q}", to_push)
-        end
+        normalized_time = time
       end
-      pushed
-    end
 
-    # Create a hash of options and their values
-    def valid_options
-      VALID_OPTIONS_KEYS.inject({}){|o,k| o.merge!(k => send(k)) }
-    end
+      # convert to float if necessary
+      normalized_time = normalized_time.to_f unless normalized_time.is_a?(Numeric)
 
-    # Create a hash of the default options and their values
-    def default_options
-      DEFAULT_OPTIONS
-    end
+      return normalized_time
 
-    # Set the VALID_OPTIONS_KEYS with their DEFAULT_OPTIONS
-    def reset_options
-      VALID_OPTIONS_KEYS.each do |key|
-        send("#{key}=", DEFAULT_OPTIONS[key])
-      end
     end
 
   end

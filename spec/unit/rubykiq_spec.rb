@@ -12,9 +12,9 @@ describe Rubykiq do
     it { should be_kind_of(Rubykiq::Client) }
   end
 
-  describe :connection do
-    subject { Rubykiq.connection }
-    it { should be_kind_of(Rubykiq::Connection) }
+  describe :connection_pool do
+    subject { Rubykiq.connection_pool }
+    it { should be_kind_of(::ConnectionPool) }
   end
 
 end

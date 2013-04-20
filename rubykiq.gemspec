@@ -6,6 +6,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "redis", "~> 3.0"
   gem.add_dependency "redis-namespace", "~> 1.0"
   gem.add_dependency "multi_json", "~> 1.0"
+  gem.add_dependency "connection_pool", "~> 1.0"
   gem.add_development_dependency "bundler", "~> 1.0"
   gem.name          = "rubykiq"
   gem.version       = Rubykiq::VERSION

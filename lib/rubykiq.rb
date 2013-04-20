@@ -5,7 +5,7 @@ require "rubykiq/connection"
 module Rubykiq
   extend SingleForwardable
 
-  def_delegators :client, :connection, :reset, :namespace, :namespace=
+  def_delegators :client, :connection_pool, :reset
 
   # Fetch the Rubykiq::Client
   #

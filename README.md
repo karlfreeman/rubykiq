@@ -14,24 +14,25 @@
 Sidekiq is a fantastic message processing library which has a simple and stable message format. Rubykiq aims to be a portable library to push jobs in to Sidekiq with as little overhead as possible Whilst having feature parity on default client conventions.
 
 ```ruby
-require 'rubykiq'
+require "rubykiq"
 
 # uses "default" queue unless specified
-Rubykiq.push(:class => 'Worker', :args => ['foo', 1, :bat => 'bar'])
+Rubykiq.push(:class => "Worker", :args => ["foo", 1, :bat => "bar"])
 
 # args are optionally set to empty
-Rubykiq.push(:class => 'Scheduler', :queue => 'scheduler')
+Rubykiq.push(:class => "Scheduler", :queue => "scheduler")
 
 # will batch up multiple jobs
-Rubykiq.push(:class => 'Worker', :args => [['foo'],['bar']]) 
+Rubykiq.push(:class => "Worker", :args => [["foo"], ["bar"]]) 
 
-# at param can be a 'Time', 'Date' or any 'Time.parse'-able strings
-Rubykiq.push(:class => 'DelayedHourMailer', :at => Time.now + 3600)
-Rubykiq.push(:class => 'DelayedDayMailer', :at => DateTime.now.next_day)
-Rubykiq.push(:class => 'DelayedDayMailer', :at => 2013-01-01T09:00:00Z)
+# at param can be a "Time", "Date" or any "Time.parse"-able strings
+Rubykiq.push(:class => "DelayedHourMailer", :at => Time.now + 3600)
+Rubykiq.push(:class => "DelayedDayMailer", :at => DateTime.now.next_day)
+Rubykiq.push(:class => "DelayedDayMailer", :at => "2013-01-01T09:00:00Z")
 
 # alias based sugar
-Rubykiq << { :class => "Worker" }
+job = { :class => "Worker" }
+Rubykiq << job
 ```
 
 ##### It's advised that using [Sidekiq::Client's push] method is going to be better in most everyday cases
@@ -43,6 +44,17 @@ Rubykiq << { :class => "Worker" }
 * [Redis][] has support for [alternative drivers](https://github.com/redis/redis-rb#alternate-drivers), Rubykiq is tested with these in mind. ( eg em-synchrony )
 * Some minor safety / parsing around the `:at` parameter to support `Time`, `Date` and `String` timestamps
 * Simplier setup with less ( gem ) dependencies
+
+```ruby
+# will also detect REDIS_URL, REDIS_PROVIDER and REDISTOGO_URL ENV variables
+Rubykiq.url = "redis://127.0.0.1:6379"
+
+# alternative driver support
+Rubykiq.driver = :hiredis
+
+# defaults to nil
+Rubykiq.namespace = "background"
+```
 
 [redis]: https://github.com/redis/redis-rb
 

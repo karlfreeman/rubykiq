@@ -2,8 +2,6 @@
 
 [Sidekiq] agnostic enqueuing using Redis.
 
-##### It's advised that using [Sidekiq::Client's push] method is going to be better in most everyday cases
-
 [sidekiq::client's push]: https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/client.rb#L36
 
 [gem]: https://rubygems.org/gems/rubykiq
@@ -38,6 +36,8 @@ Rubykiq.push(:class => "DelayedDayMailer", :at => "2013-01-01T09:00:00Z")
 job = { :class => "Worker" }
 Rubykiq << job
 ```
+
+##### It's advised that using [Sidekiq::Client's push] method when allready available is going to be better in most everyday cases
 
 ## Features
 

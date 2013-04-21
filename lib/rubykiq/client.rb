@@ -11,6 +11,7 @@ module Rubykiq
     VALID_OPTIONS_KEYS = [
       :redis_pool_size,
       :redis_pool_timeout,
+      :url,
       :namespace,
       :driver,
       :retry,
@@ -21,6 +22,7 @@ module Rubykiq
     DEFAULT_OPTIONS = {
       :redis_pool_size => 1,
       :redis_pool_timeout => 1,
+      :url => nil,
       :namespace => nil,
       :driver => :ruby,
       :retry => true,

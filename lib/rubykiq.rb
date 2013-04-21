@@ -5,7 +5,7 @@ require "rubykiq/connection"
 module Rubykiq
   extend SingleForwardable
 
-  def_delegators :client, :connection_pool, :reset
+  def_delegators :client, :<<, :push, :connection_pool
 
   # delegate all VALID_OPTIONS_KEYS accessors to the client
   def_delegators :client, *Rubykiq::Client::VALID_OPTIONS_KEYS

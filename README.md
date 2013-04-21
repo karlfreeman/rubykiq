@@ -41,7 +41,6 @@ Rubykiq.push(:class => 'DelayedDayMailer', :at => 2013-01-01T09:00:00Z)
 
 # alias based sugar
 Rubykiq << { :class => "Worker" }
-
 ```
 
 ##### It's advised that using [Sidekiq::Client's push] method is going to be better in most everyday cases

@@ -16,22 +16,13 @@ Sidekiq is a fantastic message processing library which has a simple and stable 
 ```ruby
 require 'rubykiq'
 
-# will also detect REDIS_URL, REDIS_PROVIDER and REDISTOGO_URL ENV variables
-Rubykiq.url = "redis://127.0.0.1:6379"
-
-# tested alternative driver support
-Rubykiq.driver = :hiredis
-
-# defaults to nil
-Rubykiq.namespace = "background"
-
 # uses "default" queue unless specified
 Rubykiq.push(:class => 'Worker', :args => ['foo', 1, :bat => 'bar'])
 
 # args are optionally set to empty
 Rubykiq.push(:class => 'Scheduler', :queue => 'scheduler')
 
-# will bulk commit when sending multiple jobs
+# will batch up multiple jobs
 Rubykiq.push(:class => 'Worker', :args => [['foo'],['bar']]) 
 
 # at param can be a 'Time', 'Date' or any 'Time.parse'-able strings

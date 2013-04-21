@@ -2,6 +2,10 @@
 
 [Sidekiq] agnostic enqueuing using Redis.
 
+##### It's advised that using [Sidekiq::Client's push] method is going to be better in most everyday cases
+
+[sidekiq::client's push]: https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/client.rb#L36
+
 [gem]: https://rubygems.org/gems/rubykiq
 [travis]: http://travis-ci.org/karlfreeman/rubykiq
 [gemnasium]: https://gemnasium.com/karlfreeman/rubykiq
@@ -35,15 +39,13 @@ job = { :class => "Worker" }
 Rubykiq << job
 ```
 
-##### It's advised that using [Sidekiq::Client's push] method is going to be better in most everyday cases
-
-[sidekiq::client's push]: https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/client.rb#L36
-
 ## Features
 
 * [Redis][] has support for [alternative drivers](https://github.com/redis/redis-rb#alternate-drivers), Rubykiq is tested with these in mind. ( eg em-synchrony )
 * Some minor safety / parsing around the `:at` parameter to support `Time`, `Date` and `String` timestamps
 * Simplier setup with less ( gem ) dependencies
+
+[redis]: https://github.com/redis/redis-rb
 
 ```ruby
 # will also detect REDIS_URL, REDIS_PROVIDER and REDISTOGO_URL ENV variables
@@ -55,8 +57,6 @@ Rubykiq.driver = :hiredis
 # defaults to nil
 Rubykiq.namespace = "background"
 ```
-
-[redis]: https://github.com/redis/redis-rb
 
 ## Supported Ruby Versions
 This library aims to support and is [tested against][travis] the following Ruby

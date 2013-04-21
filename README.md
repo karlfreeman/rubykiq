@@ -27,6 +27,7 @@ Rubykiq.push(:class => 'MyWorker', :args => ['foo', 1, :bat => 'bar']) # uses de
 
 * [Redis][] has support for [alternative drivers](https://github.com/redis/redis-rb#alternate-drivers), Rubykiq is tested with these in mind. ( eg em-synchrony )
 * Some minor safety / parsing around the `:at` parameter to support `Time`, `Date` and `String` timestamps
+* Simplier setup with less ( gem ) dependencies
 
 [redis]: https://github.com/redis/redis-rb
 

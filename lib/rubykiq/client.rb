@@ -165,7 +165,7 @@ module Rubykiq
 
       # apply the default options
       [:retry, :queue].each do |key|
-        pre_normalized_item[key] = send("#{key}")
+        pre_normalized_item[key] = send("#{key}") unless pre_normalized_item.has_key?(key)
       end
 
       # provide a job ID

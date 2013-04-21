@@ -2,8 +2,6 @@
 
 [Sidekiq] agnostic enqueuing using Redis.
 
-[sidekiq::client's push]: https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/client.rb#L36
-
 [gem]: https://rubygems.org/gems/rubykiq
 [travis]: http://travis-ci.org/karlfreeman/rubykiq
 [gemnasium]: https://gemnasium.com/karlfreeman/rubykiq
@@ -13,10 +11,28 @@
 [sidekiq]: http://mperham.github.com/sidekiq/
 
 ## Usage Examples
-Sidekiq is a fantastic message processing library which has a simple and stable message format. Rubykiq aims to be a portable library to push jobs in to Sidekiq with as little overhead as possible Whilst having feature parity on default client conventions.
+Sidekiq is a fantastic message processing library which has a simple and stable message format. Rubykiq aims to be a portable library to push jobs in to Sidekiq with as little overhead as possible Whilst having feature parity on Sidekiq::Client's conventions.
+
+## Features
+
+* [Redis][] has support for [alternative drivers](https://github.com/redis/redis-rb#alternate-drivers), Rubykiq is tested with these in mind. ( eg em-synchrony )
+* Some minor safety / parsing around the `:at` parameter to support `Time`, `Date` and `String` timestamps
+* Slightly less gem dependecies, and by that I mean Sidekiq::Client without Celluloid ( which is allready very light )
+
+[redis]: https://github.com/redis/redis-rb
+
 
 ```ruby
 require "rubykiq"
+
+# will also detect REDIS_URL, REDIS_PROVIDER and REDISTOGO_URL ENV variables
+Rubykiq.url = "redis://127.0.0.1:6379"
+
+# alternative driver support
+Rubykiq.driver = :hiredis
+
+# defaults to nil
+Rubykiq.namespace = "background"
 
 # uses "default" queue unless specified
 Rubykiq.push(:class => "Worker", :args => ["foo", 1, :bat => "bar"])
@@ -36,27 +52,9 @@ Rubykiq.push(:class => "DelayedDayMailer", :at => "2013-01-01T09:00:00Z")
 job = { :class => "Worker" }
 Rubykiq << job
 ```
+__It's advised that using [Sidekiq::Client's push] method when already a dependency is going to be better in most everyday cases__
 
-##### It's advised that using [Sidekiq::Client's push] method when allready available is going to be better in most everyday cases
-
-## Features
-
-* [Redis][] has support for [alternative drivers](https://github.com/redis/redis-rb#alternate-drivers), Rubykiq is tested with these in mind. ( eg em-synchrony )
-* Some minor safety / parsing around the `:at` parameter to support `Time`, `Date` and `String` timestamps
-* Simplier setup with less ( gem ) dependencies
-
-[redis]: https://github.com/redis/redis-rb
-
-```ruby
-# will also detect REDIS_URL, REDIS_PROVIDER and REDISTOGO_URL ENV variables
-Rubykiq.url = "redis://127.0.0.1:6379"
-
-# alternative driver support
-Rubykiq.driver = :hiredis
-
-# defaults to nil
-Rubykiq.namespace = "background"
-```
+[sidekiq::client's push]: https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/client.rb#L36
 
 ## Supported Ruby Versions
 This library aims to support and is [tested against][travis] the following Ruby

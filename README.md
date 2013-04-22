@@ -8,7 +8,7 @@
 
 [Sidekiq] agnostic enqueuing using Redis.
 
-[sidekiq]: http://mperham.github.com/sidekiq/
+[sidekiq]: http://mperham.github.com/sidekiq
 
 Sidekiq is a fantastic message processing library which has a simple and stable message format. `Rubykiq` aims to be a portable library to push jobs in to Sidekiq with as little overhead as possible whilst having feature parity on `Sidekiq::Client`'s conventions.
 
@@ -69,8 +69,8 @@ implementations:
 * [JRuby][] (drivers: ruby)
 * [Rubinius][] (drivers: ruby)
 
-[jruby]: http://www.jruby.org/
-[rubinius]: http://rubini.us/
+[jruby]: http://www.jruby.org
+[rubinius]: http://rubini.us
 
 # Credits
 

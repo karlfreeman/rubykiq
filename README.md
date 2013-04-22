@@ -1,12 +1,12 @@
-# Rubykiq ( WIP ) [![Gem Version](https://badge.fury.io/rb/rubykiq.png)][gem] [![Build Status](https://travis-ci.org/karlfreeman/rubykiq.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/karlfreeman/rubykiq.png?travis)][gemnasium] [![Coverage Status](https://coveralls.io/repos/karlfreeman/rubykiq/badge.png?branch=master)][coveralls] [![Code Climate](https://codeclimate.com/github/karlfreeman/rubykiq.png)][codeclimate]
-
-[Sidekiq] agnostic enqueuing using Redis.
+# Rubykiq [![Gem Version](https://badge.fury.io/rb/rubykiq.png)][gem] [![Build Status](https://travis-ci.org/karlfreeman/rubykiq.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/karlfreeman/rubykiq.png?travis)][gemnasium] [![Coverage Status](https://coveralls.io/repos/karlfreeman/rubykiq/badge.png?branch=master)][coveralls] [![Code Climate](https://codeclimate.com/github/karlfreeman/rubykiq.png)][codeclimate]
 
 [gem]: https://rubygems.org/gems/rubykiq
 [travis]: http://travis-ci.org/karlfreeman/rubykiq
 [gemnasium]: https://gemnasium.com/karlfreeman/rubykiq
 [coveralls]: https://coveralls.io/r/karlfreeman/rubykiq
 [codeclimate]: https://codeclimate.com/github/karlfreeman/rubykiq
+
+[Sidekiq] agnostic enqueuing using Redis.
 
 [sidekiq]: http://mperham.github.com/sidekiq/
 
@@ -51,9 +51,13 @@ Rubykiq.push(:class => "DelayedMailer", :at => "2013-01-01T09:00:00Z")
 job = { :class => "Worker" }
 Rubykiq << job
 ```
-__It's advised that using [Sidekiq::Client's push] method when already a dependency is going to be better in most everyday cases__
+__It's advised that using [Sidekiq::Client's push](https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/client.rb#L36) method when already a dependency is better in most everyday cases__
 
-[sidekiq::client's push]: https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/client.rb#L36
+## Supported Redis Drivers
+
+* [Ruby](https://github.com/redis/redis-rb#alternate-drivers)
+* [Hiredis](https://github.com/redis/hiredis)
+* [Synchrony](https://github.com/igrigorik/em-synchrony)
 
 ## Supported Ruby Versions
 This library aims to support and is [tested against][travis] the following Ruby

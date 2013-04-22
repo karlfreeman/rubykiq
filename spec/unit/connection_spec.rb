@@ -38,7 +38,7 @@ describe Rubykiq::Connection do
           ENV[test_case[:name]] = "redis://#{test_case[:value]}:6379/0"
         end
         after do
-          ENV[test_case[:name]] = nil  
+          ENV[test_case[:name]] = nil
         end
         its(:host) { should eq test_case[:value] }
       end

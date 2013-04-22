@@ -81,11 +81,13 @@ describe Rubykiq::Client do
                   connection.flushdb
                 end
 
-                expect { client.push(:class => "MyWorker", :args => args) }.to change { client.connection_pool do |connection| connection.llen("queue:default"); end }.from(0).to(args.length)
+                expect { client.push(:class => "MyWorker", :args => args) }.to change {
+                  client.connection_pool do |connection| connection.llen("queue:default"); end
+                }.from(0).to(args.length)
 
                 raw_jobs = client.connection_pool do |connection| connection.lrange("queue:default", 0, args.length); end
                 raw_jobs.each do |job|
-                  job = MultiJson.decode(job, :symbolize_keys => true)  
+                  job = MultiJson.decode(job, :symbolize_keys => true)
                   expect(job).to have_key(:jid)
                 end
 
@@ -107,17 +109,19 @@ describe Rubykiq::Client do
                       connection.flushdb
                     end
 
-                    expect { client.push(:class => "MyWorker", :args => args, :at => time) }.to change { client.connection_pool do |connection| connection.zcard("schedule"); end }.from(0).to(args.length)
+                    expect { client.push(:class => "MyWorker", :args => args, :at => time) }.to change {
+                      client.connection_pool do |connection| connection.zcard("schedule"); end
+                    }.from(0).to(args.length)
 
                     raw_jobs = client.connection_pool do |connection| connection.zrange("schedule", 0, args.length); end
                     raw_jobs.each do |job|
-                      job = MultiJson.decode(job, :symbolize_keys => true)  
+                      job = MultiJson.decode(job, :symbolize_keys => true)
                       expect(job).to have_key(:at)
                       expect(job[:at]).to be_within(1).of(Time.now.to_f)
                     end
 
                   end
-                  
+
                 end
 
               end

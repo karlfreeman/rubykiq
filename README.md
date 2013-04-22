@@ -10,7 +10,7 @@
 
 [sidekiq]: http://mperham.github.com/sidekiq/
 
-Sidekiq is a fantastic message processing library which has a simple and stable message format. Rubykiq aims to be a portable library to push jobs in to Sidekiq with as little overhead as possible Whilst having feature parity on `Sidekiq::Client`'s conventions.
+Sidekiq is a fantastic message processing library which has a simple and stable message format. `Rubykiq` aims to be a portable library to push jobs in to Sidekiq with as little overhead as possible whilst having feature parity on `Sidekiq::Client`'s conventions.
 
 ## Features / Usage Examples
 

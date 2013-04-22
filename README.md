@@ -17,6 +17,7 @@ Sidekiq is a fantastic message processing library which has a simple and stable 
 * [Redis][] has support for [alternative drivers](https://github.com/redis/redis-rb#alternate-drivers), Rubykiq is tested with these in mind. ( eg em-synchrony )
 * Some minor safety / parsing around the `:at` parameter to support `Time`, `Date` and `String` timestamps
 * Slightly less gem dependecies, and by that I mean Sidekiq::Client without Celluloid ( which is allready very light )
+* Pushing multiple and singular jobs has the same interface
 
 [redis]: https://github.com/redis/redis-rb
 

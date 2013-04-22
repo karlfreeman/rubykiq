@@ -45,7 +45,7 @@ Rubykiq.push(:class => "Worker", :args => [["foo"], ["bar"]])
 # at param can be a "Time", "Date" or any "Time.parse"-able strings
 Rubykiq.push(:class => "DelayedHourMailer", :at => Time.now + 3600)
 Rubykiq.push(:class => "DelayedDayMailer", :at => DateTime.now.next_day)
-Rubykiq.push(:class => "DelayedDayMailer", :at => "2013-01-01T09:00:00Z")
+Rubykiq.push(:class => "DelayedMailer", :at => "2013-01-01T09:00:00Z")
 
 # alias based sugar
 job = { :class => "Worker" }

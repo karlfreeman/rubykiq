@@ -10,10 +10,9 @@
 
 [sidekiq]: http://mperham.github.com/sidekiq/
 
-## Usage Examples
 Sidekiq is a fantastic message processing library which has a simple and stable message format. Rubykiq aims to be a portable library to push jobs in to Sidekiq with as little overhead as possible Whilst having feature parity on Sidekiq::Client's conventions.
 
-## Features
+## Features / Usage Examples
 
 * [Redis][] has support for [alternative drivers](https://github.com/redis/redis-rb#alternate-drivers), Rubykiq is tested with these in mind. ( eg em-synchrony )
 * Some minor safety / parsing around the `:at` parameter to support `Time`, `Date` and `String` timestamps

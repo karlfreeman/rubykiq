@@ -24,6 +24,7 @@ describe Rubykiq::Client do
 
     context "with #{driver}" do
 
+      # make sure the let is the current client being tested
       let(:client) { self.send("#{driver}_client") }
 
       describe :defaults do

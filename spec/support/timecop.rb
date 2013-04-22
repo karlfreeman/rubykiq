@@ -1,1 +1,2 @@
 require "timecop"
+Timecop.freeze

@@ -1,7 +1,7 @@
-require 'connection_pool'
-require 'securerandom'
-require 'multi_json'
-require 'time'
+require "connection_pool"
+require "securerandom"
+require "multi_json"
+require "time"
 
 module Rubykiq
 

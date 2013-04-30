@@ -1,5 +1,5 @@
-require 'redis'
-require 'redis/namespace'
+require "redis"
+require "redis/namespace"
 
 module Rubykiq
 

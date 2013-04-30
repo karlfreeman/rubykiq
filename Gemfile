@@ -10,7 +10,7 @@ gem "yard"
 # platforms :jruby do
 # end
 
-gem "hiredis", "~> 0.4.5", :require => false
+gem "hiredis", ">= 0.4.5", :require => false
 gem "em-synchrony", :require => false
 
 group :development do

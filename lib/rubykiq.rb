@@ -10,7 +10,7 @@ module Rubykiq
   # delegate all VALID_OPTIONS_KEYS accessors to the client
   def_delegators :client, *Rubykiq::Client::VALID_OPTIONS_KEYS
 
-  # delegate all VALID_OPTIONS_KEYS setters to the client ( Hacky I know... )
+  # delegate all VALID_OPTIONS_KEYS setters to the client ( hacky I know... )
   def_delegators :client, *(Rubykiq::Client::VALID_OPTIONS_KEYS.dup.collect! do |key| "#{key}=".to_sym; end)
 
   # Fetch the Rubykiq::Client

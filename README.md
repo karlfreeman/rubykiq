@@ -51,7 +51,11 @@ Rubykiq.push(:class => "DelayedMailer", :at => "2013-01-01T09:00:00Z")
 job = { :class => "Worker" }
 Rubykiq << job
 ```
-__It's advised that using [Sidekiq::Client's push](https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/client.rb#L36) method when already a dependency is better in most everyday cases__
+
+## Caveats
+
+* It's advised that using [Sidekiq::Client's push](https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/client.rb#L36) method when already a dependency is better in most everyday cases
+* If you rely on any [Sidekiq Middleware](https://github.com/mperham/sidekiq/wiki/Middleware), Rubykiq is not aware of them so defaults will not be applied to the job hash.
 
 ## Supported Redis Drivers
 

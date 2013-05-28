@@ -10,6 +10,8 @@ gem "yard"
 # platforms :jruby do
 # end
 
+gem "connection_pool", :git => "git://github.com/karlfreeman/connection_pool.git", :branch => "1.8.7-support"
+
 gem "hiredis", ">= 0.4.5", :require => false
 gem "em-synchrony", :require => false
 

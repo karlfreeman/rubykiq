@@ -27,7 +27,7 @@ group :test do
   gem "timecop"
   gem "simplecov", :require => false
   gem "coveralls", :require => false
-  gem "cane"
+  gem "cane", :require => false, :platforms => :ruby_19
 end
 
 gemspec

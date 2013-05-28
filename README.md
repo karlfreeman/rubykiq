@@ -53,6 +53,7 @@ Rubykiq << job
 [![Build Status](https://travis-ci.org/karlfreeman/rubykiq.png)][travis]
 [![Dependency Status](https://gemnasium.com/karlfreeman/rubykiq.png?travis)][gemnasium]
 [![Code Quality](https://codeclimate.com/github/karlfreeman/rubykiq.png)][codeclimate]
+[![Coverage Status](https://coveralls.io/repos/karlfreeman/rubykiq/badge.png?branch=master)][coveralls]
 
 ## Supported Redis Drivers
 
@@ -67,8 +68,8 @@ implementations:
 * Ruby 1.9.2 (drivers: ruby, hiredis, synchrony)
 * Ruby 1.9.3 (drivers: ruby, hiredis, synchrony)
 * Ruby 2.0.0 (drivers: ruby, hiredis, synchrony)
-* [JRuby] (drivers: ruby)
-* [Rubinius] (drivers: ruby)
+* [JRuby][] (drivers: ruby)
+* [Rubinius][] (drivers: ruby)
 
 # Credits
 
@@ -91,3 +92,4 @@ Cribbed:
 [codeclimate]: https://codeclimate.com/github/karlfreeman/rubykiq
 [jruby]: http://www.jruby.org
 [rubinius]: http://rubini.us
+

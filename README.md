@@ -1,9 +1,18 @@
 # Rubykiq
 
-[Sidekiq] agnostic enqueuing using Redis.
+[Sidekiq][sidekiq] agnostic enqueuing using Redis.
 
 Sidekiq is a fantastic message processing library which has a simple and stable message format. `Rubykiq` aims to be a portable library to push jobs in to Sidekiq with as little overhead as possible whilst having feature parity on `Sidekiq::Client`'s conventions.
 
+## Installation
+
+```ruby
+gem 'rubykiq', '~> 0.0.1'
+```
+
+```ruby
+require 'rubykiq'
+```
 ## Features / Usage Examples
 
 * [Redis] has support for [alternative drivers](https://github.com/redis/redis-rb#alternate-drivers), Rubykiq is tested with these in mind. (eg `:synchrony`)
@@ -13,48 +22,47 @@ Sidekiq is a fantastic message processing library which has a simple and stable 
 * Easier configuration (IMO)
 
 ```ruby
-require "rubykiq"
 
 # will also detect REDIS_URL, REDIS_PROVIDER and REDISTOGO_URL ENV variables
-Rubykiq.url = "redis://127.0.0.1:6379"
+Rubykiq.url = 'redis://127.0.0.1:6379'
 
 # alternative driver support ( :ruby, :hiredis, :synchrony )
 Rubykiq.driver = :synchrony
 
 # defaults to nil
-Rubykiq.namespace = "background"
+Rubykiq.namespace = 'background'
 
-# uses "default" queue unless specified
-Rubykiq.push(:class => "Worker", :args => ["foo", 1, :bat => "bar"])
+# uses 'default' queue unless specified
+Rubykiq.push(:class => 'Worker', :args => ['foo', 1, :bat => 'bar'])
 
 # args are optionally set to empty
-Rubykiq.push(:class => "Scheduler", :queue => "scheduler")
+Rubykiq.push(:class => 'Scheduler', :queue => 'scheduler')
 
 # will batch up multiple jobs
-Rubykiq.push(:class => "Worker", :args => [["foo"], ["bar"]]) 
+Rubykiq.push(:class => 'Worker', :args => [['foo'], ['bar']]) 
 
-# at param can be a "Time", "Date" or any "Time.parse"-able strings
-Rubykiq.push(:class => "DelayedHourMailer", :at => Time.now + 3600)
-Rubykiq.push(:class => "DelayedDayMailer", :at => DateTime.now.next_day)
-Rubykiq.push(:class => "DelayedMailer", :at => "2013-01-01T09:00:00Z")
+# at param can be a 'Time', 'Date' or any 'Time.parse'-able strings
+Rubykiq.push(:class => 'DelayedHourMailer', :at => Time.now + 3600)
+Rubykiq.push(:class => 'DelayedDayMailer', :at => DateTime.now.next_day)
+Rubykiq.push(:class => 'DelayedMailer', :at => '2013-01-01T09:00:00Z')
 
 # alias based sugar
-job = { :class => "Worker" }
+job = { :class => 'Worker' }
 Rubykiq << job
 ```
 
 ## Caveats
 
 * It's advised that using [Sidekiq::Client's push](https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/client.rb#L36) method when already a dependency is better in most everyday cases
-* If you rely on any [Sidekiq Middleware](https://github.com/mperham/sidekiq/wiki/Middleware), Rubykiq is not aware of them so defaults will not be applied to the job hash.
+* If you rely on any [Sidekiq Middleware](https://github.com/mperham/sidekiq/wiki/middleware), Rubykiq is not aware of them so defaults will not be applied to the job hash.
 
 ## Build & Dependency Status
 
 [![Gem Version](https://badge.fury.io/rb/rubykiq.png)][gem]
 [![Build Status](https://travis-ci.org/karlfreeman/rubykiq.png)][travis]
-[![Dependency Status](https://gemnasium.com/karlfreeman/rubykiq.png?travis)][gemnasium]
 [![Code Quality](https://codeclimate.com/github/karlfreeman/rubykiq.png)][codeclimate]
 [![Coverage Status](https://coveralls.io/repos/karlfreeman/rubykiq/badge.png?branch=master)][coveralls]
+[![Gittip](http://img.shields.io/gittip/karlfreeman.png)][gittip]
 
 ## Supported Redis Drivers
 
@@ -63,6 +71,7 @@ Rubykiq << job
 * [Synchrony](https://github.com/igrigorik/em-synchrony)
 
 ## Supported Ruby Versions
+
 This library aims to support and is [tested against][travis] the following Ruby
 implementations:
 
@@ -76,7 +85,7 @@ implementations:
 
 Inspiration:
 
-- [Michael Grosser's Enqueue into Sidkiq post](http://grosser.it/2013/01/17/enqueue-into-sidekiq-via-pure-redis-without-loading-sidekiq/)
+- [Michael Grosser's Enqueue into Sidkiq post](http://grosser.it/2013/01/17/enqueue-into-sidekiq-via-pure-redis-without-loading-sidekiq)
 
 Cribbed:
 
@@ -84,13 +93,13 @@ Cribbed:
 - [Sidekiq's internal redis class](https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/redis_connection.rb)
 - [Sidekiq's FAQ](https://github.com/mperham/sidekiq/wiki/FAQ)
 
-[sidekiq]: http://mperham.github.com/sidekiq
-[redis]: https://github.com/redis/redis-rb
 [gem]: https://rubygems.org/gems/rubykiq
 [travis]: http://travis-ci.org/karlfreeman/rubykiq
-[gemnasium]: https://gemnasium.com/karlfreeman/rubykiq
 [coveralls]: https://coveralls.io/r/karlfreeman/rubykiq
 [codeclimate]: https://codeclimate.com/github/karlfreeman/rubykiq
+[gittip]: https://www.gittip.com/karlfreeman
 [jruby]: http://www.jruby.org
 [rubinius]: http://rubini.us
 
+[sidekiq]: http://mperham.github.com/sidekiq
+[redis]: https://github.com/redis/redis-rb

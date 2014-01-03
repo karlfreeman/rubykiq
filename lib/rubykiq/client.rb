@@ -1,7 +1,7 @@
-require "connection_pool"
-require "securerandom"
-require "multi_json"
-require "time"
+require 'connection_pool'
+require 'securerandom'
+require 'multi_json'
+require 'time'
 
 module Rubykiq
 
@@ -26,7 +26,7 @@ module Rubykiq
       :namespace => nil,
       :driver => :ruby,
       :retry => true,
-      :queue => "default"
+      :queue => 'default'
     }.freeze
 
     # Bang open the valid options
@@ -63,7 +63,7 @@ module Rubykiq
     # Push a Sidekiq job to Redis. Accepts a number of options:
     #
     #   :class - the worker class to call, required.
-    #   :queue - the named queue to use, optional ( default: "default" )
+    #   :queue - the named queue to use, optional ( default: 'default' )
     #   :args - an array of simple arguments to the perform method, must be JSON-serializable, optional ( default: [] )
     #   :retry - whether to retry this job if it fails, true or false, default true, optional ( default: true )
     #   :at - when the job should be executed. This can be a `Time`, `Date` or any `Time.parse`-able strings, optional.
@@ -72,15 +72,15 @@ module Rubykiq
     # if multiple jobs are pushed the size of the jobs will be returned
     #
     # Example:
-    #   Rubykiq.push(:class => "Worker", :args => ["foo", 1, :bat => "bar"])
-    #   Rubykiq.push(:class => "Scheduler", :queue => "scheduler")
-    #   Rubykiq.push(:class => "DelayedMailer", :at => "2013-01-01T09:00:00Z")
-    #   Rubykiq.push(:class => "Worker", :args => [["foo"], ["bar"]])
+    #   Rubykiq.push(:class => 'Worker', :args => ['foo', 1, :bat => 'bar'])
+    #   Rubykiq.push(:class => 'Scheduler', :queue => 'scheduler')
+    #   Rubykiq.push(:class => 'DelayedMailer', :at => '2013-01-01T09:00:00Z')
+    #   Rubykiq.push(:class => 'Worker', :args => [['foo'], ['bar']])
     #
     # @param items [Array]
     def push(items)
-      raise(ArgumentError, "Message must be a Hash") unless items.is_a?(Hash)
-      raise(ArgumentError, "Message args must be an Array") if items[:args] && !items[:args].is_a?(Array)
+      raise(ArgumentError, 'Message must be a Hash') unless items.is_a?(Hash)
+      raise(ArgumentError, 'Message args must be an Array') if items[:args] && !items[:args].is_a?(Array)
 
       # args are optional
       items[:args] ||= []
@@ -130,9 +130,9 @@ module Rubykiq
       # we're expecting items to have an nested array of args, lets take each one and correctly normalize them
       payloads = items[:args].map do |args|
         raise ArgumentError, "Bulk arguments must be an Array of Arrays: [[:foo => 'bar'], [:foo => 'foo']]" unless args.is_a?(Array)
-        # clone the original items ( for :queue, :class, etc.. )
+        # clone the original items (for :queue, :class, etc..)
         item = items.clone
-        # merge this item's args ( eg the nested `arg` array )
+        # merge this item's args (eg the nested `arg` array)
         item.merge!(:args => args) unless args.empty?
         # normalize this individual item
         item = normalize_item(item)
@@ -150,12 +150,12 @@ module Rubykiq
       pushed = false
       Rubykiq.connection_pool do |connection|
         if payloads.first[:at]
-          pushed = connection.zadd("schedule", payloads.map {|item| [ item[:at].to_s, ::MultiJson.encode(item) ]})
+          pushed = connection.zadd('schedule', payloads.map {|item| [ item[:at].to_s, ::MultiJson.encode(item) ]})
         else
           q = payloads.first[:queue]
           to_push = payloads.map { |item| ::MultiJson.encode(item) }
           _, pushed = connection.multi do
-            connection.sadd("queues", q)
+            connection.sadd('queues', q)
             connection.lpush("queue:#{q}", to_push)
           end
         end
@@ -165,10 +165,10 @@ module Rubykiq
 
     #
     def normalize_item(item)
-      raise(ArgumentError, "Message must be a Hash") unless item.is_a?(Hash)
+      raise(ArgumentError, 'Message must be a Hash') unless item.is_a?(Hash)
       raise(ArgumentError, "Message must include a class and set of arguments: #{item.inspect}") if !item[:class] || !item[:args]
-      raise(ArgumentError, "Message args must be an Array") if item[:args] && !item[:args].is_a?(Array)
-      raise(ArgumentError, "Message class must be a String representation of the class name") unless item[:class].is_a?(String)
+      raise(ArgumentError, 'Message args must be an Array') if item[:args] && !item[:args].is_a?(Array)
+      raise(ArgumentError, 'Message class must be a String representation of the class name') unless item[:class].is_a?(String)
 
       # normalize the time
       item[:at] = normalize_time(item[:at]) if item[:at]
@@ -201,7 +201,7 @@ module Rubykiq
         normalized_time = time
       end
 
-      # convert the `Time` object to a float ( if necessary )
+      # convert the `Time` object to a float (if necessary)
       normalized_time = normalized_time.to_f unless normalized_time.is_a?(Numeric)
 
       return normalized_time

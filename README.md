@@ -7,7 +7,7 @@ Sidekiq is a fantastic message processing library which has a simple and stable 
 ## Installation
 
 ```ruby
-gem 'rubykiq', '~> 0.0.1'
+gem 'rubykiq', '~> 0.0.3'
 ```
 
 ```ruby
@@ -50,6 +50,15 @@ Rubykiq.push(:class => 'DelayedMailer', :at => '2013-01-01T09:00:00Z')
 # alias based sugar
 job = { :class => 'Worker' }
 Rubykiq << job
+
+# create multiple Rubykiq clients with their own drivers
+ruby_client = Rubykiq::Client.new
+hiredis_client = Rubykiq::Client.new(:driver => :hiredis)
+
+# create multiple Rubykiq clients with their own namespaces
+foo_client = Rubykiq::Client.new(:namespace => 'foo')
+bar_client = Rubykiq::Client.new(:namespace => 'bar')
+
 ```
 
 ## Caveats
@@ -76,11 +85,11 @@ Rubykiq << job
 This library aims to support and is [tested against][travis] the following Ruby
 implementations:
 
-* Ruby 1.9.2 (drivers: ruby, hiredis, synchrony)
-* Ruby 1.9.3 (drivers: ruby, hiredis, synchrony)
+* Ruby 2.1.0 (drivers: ruby, hiredis, synchrony)
 * Ruby 2.0.0 (drivers: ruby, hiredis, synchrony)
-* [JRuby][] (drivers: ruby)
-* [Rubinius][] (drivers: ruby)
+* Ruby 1.9.3 (drivers: ruby, hiredis, synchrony)
+* [JRuby][jruby] (drivers: ruby)
+* [Rubinius][rubinius] (drivers: ruby)
 
 # Credits
 

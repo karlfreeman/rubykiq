@@ -1,6 +1,6 @@
-require "forwardable"
-require "rubykiq/client"
-require "rubykiq/connection"
+require 'forwardable'
+require 'rubykiq/client'
+require 'rubykiq/connection'
 
 module Rubykiq
   extend SingleForwardable

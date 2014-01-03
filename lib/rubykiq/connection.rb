@@ -1,5 +1,5 @@
-require "redis"
-require "redis/namespace"
+require 'redis'
+require 'redis/namespace'
 
 module Rubykiq
 
@@ -25,12 +25,12 @@ module Rubykiq
 
     # lets try and fallback to another redis url
     def determine_redis_provider
-      ENV["REDISTOGO_URL"] || ENV["REDIS_PROVIDER"] || ENV["REDIS_URL"] || "redis://localhost:6379/0"
+      ENV['REDISTOGO_URL'] || ENV['REDIS_PROVIDER'] || ENV['REDIS_URL'] || 'redis://localhost:6379/0'
     end
 
     # construct a namespaced redis connection
     def build_conection(url, namespace, driver)
-      client = ::Redis.connect(:url => url, :driver => driver)
+      client = ::Redis.new(:url => url, :driver => driver)
       return ::Redis::Namespace.new(namespace, :redis => client)
     end
 

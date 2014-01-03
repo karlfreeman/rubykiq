@@ -42,6 +42,10 @@ module Rubykiq
       end
     end
 
+    def connection_pool=(val)
+      @connection_pool = val
+    end
+
     # Fetch the ::ConnectionPool of Rubykiq::Connections
     #
     # @return [::ConnectionPool]

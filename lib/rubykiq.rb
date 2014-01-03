@@ -11,13 +11,12 @@ module Rubykiq
   def_delegators :client, *Rubykiq::Client::VALID_OPTIONS_KEYS
 
   # delegate all VALID_OPTIONS_KEYS setters to the client ( hacky I know... )
-  def_delegators :client, *(Rubykiq::Client::VALID_OPTIONS_KEYS.dup.collect! do |key| "#{key}=".to_sym; end)
+  def_delegators :client, *(Rubykiq::Client::VALID_OPTIONS_KEYS.dup.map! do |key| "#{key}=".to_sym; end)
 
   # Fetch the Rubykiq::Client
   #
   # @return [Rubykiq::Client]
-  def self.client(options={})
+  def self.client(options = {})
     @client ||= Rubykiq::Client.new(options)
   end
-
 end

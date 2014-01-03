@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 gem 'yard'
 gem 'rake', '~> 10.0'
-gem 'hiredis', '>= 0.4.5', :require => false
-gem 'em-synchrony', :require => false
+gem 'hiredis', '>= 0.4.5', require: false
+gem 'em-synchrony', require: false
 
 group :development do
   gem 'pry'

@@ -14,13 +14,13 @@ describe Rubykiq::Connection do
   describe :options do
 
     context :custom do
-      subject { Rubykiq::Connection.new(:namespace => 'yyy') }
+      subject { Rubykiq::Connection.new(namespace: 'yyy') }
       its(:namespace) { should eq 'yyy' }
     end
 
     context :inherited_settings do
       it 'should work' do
-        client = Rubykiq::Client.new(:namespace => 'xxx')
+        client = Rubykiq::Client.new(namespace: 'xxx')
         client.connection_pool do |connection|
           expect(connection.namespace).to eq 'xxx'
         end
@@ -32,7 +32,7 @@ describe Rubykiq::Connection do
   describe :env do
     subject { Rubykiq::Connection.new }
 
-    [{:name => 'REDISTOGO_URL', :value => 'redistogo'}, {:name => 'REDIS_PROVIDER', :value => 'redisprovider'}, {:name => 'REDIS_URL', :value => 'redisurl'} ].each do | test_case |
+    [{ name: 'REDISTOGO_URL', value: 'redistogo' }, { name: 'REDIS_PROVIDER', value: 'redisprovider' }, { name: 'REDIS_URL', value: 'redisurl' }].each do | test_case |
       context "with ENV[#{test_case[:name]}]" do
         before do
           ENV[test_case[:name]] = "redis://#{test_case[:value]}:6379/0"

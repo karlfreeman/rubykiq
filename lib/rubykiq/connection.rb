@@ -2,9 +2,7 @@ require 'redis'
 require 'redis/namespace'
 
 module Rubykiq
-
   class Connection
-
     extend Forwardable
     def_delegators :@redis_connection, :multi, :namespace, :sadd, :zadd, :lpush, :lpop, :lrange, :llen, :zcard, :zrange, :flushdb
     def_delegators :@redis_client, :host, :port, :db, :password
@@ -18,7 +16,7 @@ module Rubykiq
       driver = options.delete(:driver)
       @redis_connection ||= build_conection(url, namespace, driver)
       @redis_client ||= @redis_connection.client
-      return @redis_connection
+      @redis_connection
     end
 
     private
@@ -30,9 +28,8 @@ module Rubykiq
 
     # construct a namespaced redis connection
     def build_conection(url, namespace, driver)
-      client = ::Redis.new(:url => url, :driver => driver)
-      return ::Redis::Namespace.new(namespace, :redis => client)
+      client = ::Redis.new(url: url, driver: driver)
+      ::Redis::Namespace.new(namespace, redis: client)
     end
-
   end
 end

@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe Rubykiq do
 
@@ -22,8 +22,8 @@ describe Rubykiq do
 
     describe key do
       subject { Rubykiq }
-      it {should respond_to key }
-      it {should respond_to "#{key}=".to_sym }
+      it { should respond_to key }
+      it { should respond_to "#{key}=".to_sym }
     end
 
   end

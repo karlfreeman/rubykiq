@@ -143,7 +143,7 @@ module Rubykiq
     # persist the job message(s)
     def raw_push(payloads)
       pushed = false
-      Rubykiq.connection_pool do |connection|
+      connection_pool do |connection|
         if payloads.first[:at]
           pushed = connection.zadd('schedule', payloads.map { |item| [item[:at].to_s, ::MultiJson.encode(item)] })
         else

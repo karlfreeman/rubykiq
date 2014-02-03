@@ -12,13 +12,12 @@ describe Rubykiq::Client do
     Timecop.return
   end
 
-  let (:ruby_client) { Rubykiq::Client.new(namespace: :ruby) }
-  let (:hiredis_client) { Rubykiq::Client.new(driver: :hiredis) }
-  let (:synchrony_client) { Rubykiq::Client.new(driver: :synchrony) }
+  let (:ruby_client) { Rubykiq::Client.new(driver: :ruby, namespace: :ruby) }
+  let (:hiredis_client) { Rubykiq::Client.new(driver: :hiredis, namespace: :hiredis) }
+  let (:synchrony_client) { Rubykiq::Client.new(driver: :synchrony, namespace: :synchrony) }
 
   # eg with a variety of drivers
-  # , :synchrony
-  [:ruby].each do |driver|
+  [:ruby, :hiredis, :synchrony].each do |driver|
 
     # skip incompatible drivers when running in JRuby
     next if jruby? && (driver == :hiredis || :synchrony)
@@ -30,7 +29,7 @@ describe Rubykiq::Client do
 
       describe :defaults do
         subject { client }
-        its(:namespace) { should eq :ruby }
+        its(:namespace) { should eq driver }
         its(:driver) { should be driver }
         its(:retry) { should be_true }
         its(:queue) { should eq 'default' }

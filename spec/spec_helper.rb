@@ -9,12 +9,7 @@ end
 
 require 'rubykiq'
 
-# used as a stupid mixin class
-class DummyClass
-end
-
 RSpec.configure do |config|
-
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
@@ -30,5 +25,4 @@ RSpec.configure do |config|
       EM.stop
     end
   end
-
 end

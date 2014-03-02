@@ -30,6 +30,9 @@ module Rubykiq
     # Bang open the valid options
     attr_accessor(*VALID_OPTIONS_KEYS)
 
+    # allow the connection_pool to be set
+    attr_writer :connection_pool
+
     # Initialize a new Client object
     #
     # @param options [Hash]
@@ -38,10 +41,6 @@ module Rubykiq
       options.each_pair do |key, value|
         send("#{key}=", value) if VALID_OPTIONS_KEYS.include?(key)
       end
-    end
-
-    def connection_pool=(val)
-      @connection_pool = val
     end
 
     # Fetch the ::ConnectionPool of Rubykiq::Connections
@@ -95,7 +94,7 @@ module Rubykiq
 
     # Create a hash of options and their values
     def valid_options
-      VALID_OPTIONS_KEYS.reduce({}) { |o, k| o.merge!(k => send(k)) }
+      VALID_OPTIONS_KEYS.reduce({}) { |a, e| a.merge!(e => send(e)) }
     end
 
     # Create a hash of the default options and their values
@@ -131,7 +130,7 @@ module Rubykiq
         # merge this item's args (eg the nested `arg` array)
         item.merge!(args: args) unless args.empty?
         # normalize this individual item
-        item = normalize_item(item)
+        normalize_item(item)
       end.compact
 
       # if successfully persisted to redis return the size of the jobs

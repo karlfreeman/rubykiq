@@ -4,17 +4,11 @@ require 'em-synchrony'
 
 describe Rubykiq::Client do
 
-  before(:all) do
-    Timecop.freeze
-  end
-
-  after(:all) do
-    Timecop.return
-  end
-
-  let (:ruby_client) { Rubykiq::Client.new(driver: :ruby, namespace: :ruby) }
-  let (:hiredis_client) { Rubykiq::Client.new(driver: :hiredis, namespace: :hiredis) }
-  let (:synchrony_client) { Rubykiq::Client.new(driver: :synchrony, namespace: :synchrony) }
+  before(:all) { Timecop.freeze }
+  after(:all) { Timecop.return }
+  let(:ruby_client) { Rubykiq::Client.new(driver: :ruby, namespace: :ruby) }
+  let(:hiredis_client) { Rubykiq::Client.new(driver: :hiredis, namespace: :hiredis) }
+  let(:synchrony_client) { Rubykiq::Client.new(driver: :synchrony, namespace: :synchrony) }
 
   # eg with a variety of drivers
   [:ruby, :hiredis, :synchrony].each do |driver|
@@ -68,8 +62,8 @@ describe Rubykiq::Client do
         end
 
         # eg singular and batch
-        args = [[{ bat: 'bar' }], [[{ bat: 'bar' }], [{ bat: 'foo' }]]]
-        args.each do |args|
+        arguments = [[{ bat: 'bar' }], [[{ bat: 'bar' }], [{ bat: 'foo' }]]]
+        arguments.each do |args|
 
           context "with args #{args}" do
 

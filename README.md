@@ -1,6 +1,6 @@
 # Rubykiq
 
-[Sidekiq][sidekiq] agnostic enqueuing using Redis.
+[Sidekiq](http://mperham.github.com/sidekiq) agnostic enqueuing using Redis.
 
 Sidekiq is a fantastic message processing library which has a simple and stable message format. `Rubykiq` aims to be a portable library to push jobs in to Sidekiq with as little overhead as possible whilst having feature parity on `Sidekiq::Client`'s conventions.
 
@@ -71,7 +71,6 @@ bar_client = Rubykiq::Client.new(:namespace => 'bar')
 [![Gem Version](https://badge.fury.io/rb/rubykiq.png)][gem]
 [![Build Status](https://travis-ci.org/karlfreeman/rubykiq.png)][travis]
 [![Code Quality](https://codeclimate.com/github/karlfreeman/rubykiq.png)][codeclimate]
-[![Coverage Status](https://coveralls.io/repos/karlfreeman/rubykiq/badge.png?branch=master)][coveralls]
 [![Gittip](http://img.shields.io/gittip/karlfreeman.png)][gittip]
 
 ## Supported Redis Drivers
@@ -85,11 +84,11 @@ bar_client = Rubykiq::Client.new(:namespace => 'bar')
 This library aims to support and is [tested against][travis] the following Ruby
 implementations:
 
-* Ruby 2.1.0 (drivers: ruby, hiredis, synchrony)
-* Ruby 2.0.0 (drivers: ruby, hiredis, synchrony)
-* Ruby 1.9.3 (drivers: ruby, hiredis, synchrony)
-* [JRuby][jruby] (drivers: ruby)
-* [Rubinius][rubinius] (drivers: ruby)
+- Ruby 2.1.0 (drivers: ruby, hiredis, synchrony)
+- Ruby 2.0.0 (drivers: ruby, hiredis, synchrony)
+- Ruby 1.9.3 (drivers: ruby, hiredis, synchrony)
+- [JRuby][jruby] (drivers: ruby)
+- [Rubinius][rubinius] (drivers: ruby)
 
 # Credits
 
@@ -105,11 +104,7 @@ Cribbed:
 
 [gem]: https://rubygems.org/gems/rubykiq
 [travis]: http://travis-ci.org/karlfreeman/rubykiq
-[coveralls]: https://coveralls.io/r/karlfreeman/rubykiq
 [codeclimate]: https://codeclimate.com/github/karlfreeman/rubykiq
 [gittip]: https://www.gittip.com/karlfreeman
 [jruby]: http://www.jruby.org
 [rubinius]: http://rubini.us
-
-[sidekiq]: http://mperham.github.com/sidekiq
-[redis]: https://github.com/redis/redis-rb

@@ -43,7 +43,7 @@ describe Rubykiq::Client do
             it 'raises an ArgumentError' do
               expect { client.push([]) }.to raise_error(ArgumentError, /Message must be a Hash/)
               expect { client.push('{}') }.to raise_error(ArgumentError, /Message must be a Hash/)
-              expect { client.push(DummyClass.new) }.to raise_error(ArgumentError, /Message must be a Hash/)
+              expect { client.push(Class.new) }.to raise_error(ArgumentError, /Message must be a Hash/)
             end
           end
 
@@ -61,7 +61,7 @@ describe Rubykiq::Client do
 
           context 'with an incorrect class type' do
             it 'raises an ArgumentError' do
-              expect { client.push(class: DummyClass, args: ['foo', 1, { bat: 'bar' }]) }.to raise_error(ArgumentError, /Message class must be a String representation of the class name/)
+              expect { client.push(class: Class, args: ['foo', 1, { bat: 'bar' }]) }.to raise_error(ArgumentError, /Message class must be a String representation of the class name/)
             end
           end
 

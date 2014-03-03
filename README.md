@@ -23,7 +23,6 @@ require 'rubykiq'
 * Easier configuration (IMO)
 
 ```ruby
-
 # will also detect REDIS_URL, REDIS_PROVIDER and REDISTOGO_URL ENV variables
 Rubykiq.url = 'redis://127.0.0.1:6379'
 
@@ -58,7 +57,6 @@ hiredis_client = Rubykiq::Client.new(:driver => :hiredis)
 # create multiple Rubykiq clients with their own namespaces
 foo_client = Rubykiq::Client.new(:namespace => 'foo')
 bar_client = Rubykiq::Client.new(:namespace => 'bar')
-
 ```
 
 ## Caveats

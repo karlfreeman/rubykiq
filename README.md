@@ -7,7 +7,7 @@ Sidekiq is a fantastic message processing library which has a simple and stable 
 ## Installation
 
 ```ruby
-gem 'rubykiq', '~> 0.0.4'
+gem 'rubykiq', '~> 1.0'
 ```
 
 ```ruby

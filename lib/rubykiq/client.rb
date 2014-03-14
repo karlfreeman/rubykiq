@@ -1,7 +1,7 @@
-require 'connection_pool'
-require 'securerandom'
-require 'multi_json'
 require 'time'
+require 'multi_json'
+require 'securerandom'
+require 'connection_pool'
 
 module Rubykiq
   class Client
@@ -14,7 +14,7 @@ module Rubykiq
       :driver,
       :retry,
       :queue
-    ].freeze
+    ]
 
     # A hash of valid options and their default values
     DEFAULT_OPTIONS = {
@@ -25,7 +25,7 @@ module Rubykiq
       driver: :ruby,
       retry: true,
       queue: 'default'
-    }.freeze
+    }
 
     # Bang open the valid options
     attr_accessor(*VALID_OPTIONS_KEYS)

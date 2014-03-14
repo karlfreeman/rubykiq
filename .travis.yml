@@ -1,21 +1,24 @@
 language: ruby
 cache: bundler
+bundler_args: --without development
 rvm:
   - ruby-head
+  - ruby
   - jruby-head
+  - jruby
   - 2.1.0
   - 2.0.0
   - 1.9.3
-  - rbx-19mode
-  - jruby-19mode
-services:
-  - redis-server
+  - rbx-2
 matrix:
   fast_finish: true
   allow_failures:
     - rvm: ruby-head
+    - rvm: ruby
     - rvm: jruby-head
-    - rvm: rbx-19mode
-    - rvm: jruby-19mode
+    - rvm: jruby
+    - rvm: rbx-2
 notifications:
   email: false
+services:
+  - redis-server

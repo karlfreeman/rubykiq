@@ -1,3 +1,3 @@
 module Rubykiq
-  VERSION = '0.0.4' unless defined?(Rubykiq::VERSION)
+  VERSION = '1.0.0' unless defined?(Rubykiq::VERSION)
 end

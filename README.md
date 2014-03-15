@@ -16,7 +16,7 @@ require 'rubykiq'
 ## Features / Usage Examples
 
 * [Redis](http://redis.io) has support for [alternative drivers](https://github.com/redis/redis-rb#alternate-drivers), Rubykiq is tested with these in mind. (eg `:synchrony`)
-* the `:class` parameter can be the Class or a String of the Class (eg push jobs to Sidekiq from anywhere, not just where Sidekiq has the classes loaded)
+* the `:class` parameter can be a `Class` or a `String` of a Class (eg push jobs to Sidekiq from anywhere, not just where Sidekiq has the classes loaded)
 * The `:at` parameter supports `Time`, `Date` and any `Time.parse`-able strings.
 * Pushing multiple and singular jobs has the same interface (simply nest args)
 * Slightly less gem dependecies, and by that I mean `Sidekiq::Client` without `Celluloid` (which is already very light!)
@@ -33,30 +33,30 @@ Rubykiq.driver = :synchrony
 Rubykiq.namespace = 'background'
 
 # uses 'default' queue unless specified
-Rubykiq.push(:class => 'Worker', :args => ['foo', 1, :bat => 'bar'])
+Rubykiq.push(class: 'Worker', args: ['foo', 1, bat: 'bar'])
 
 # args are optionally set to empty
-Rubykiq.push(:class => 'Scheduler', :queue => 'scheduler')
+Rubykiq.push(class: 'Scheduler', queue: 'scheduler')
 
 # will batch up multiple jobs
-Rubykiq.push(:class => 'Worker', :args => [['foo'], ['bar']]) 
+Rubykiq.push(class: 'Worker', args: [['foo'], ['bar']]) 
 
 # at param can be a 'Time', 'Date' or any 'Time.parse'-able strings
-Rubykiq.push(:class => 'DelayedHourMailer', :at => Time.now + 3600)
-Rubykiq.push(:class => 'DelayedDayMailer', :at => DateTime.now.next_day)
-Rubykiq.push(:class => 'DelayedMailer', :at => '2013-01-01T09:00:00Z')
+Rubykiq.push(class: 'DelayedHourMailer', at: Time.now + 3600)
+Rubykiq.push(class: 'DelayedDayMailer', at: DateTime.now.next_day)
+Rubykiq.push(class: 'DelayedMailer', at: '2013-01-01T09:00:00Z')
 
 # alias based sugar
-job = { :class => 'Worker' }
+job = { class: 'Worker' }
 Rubykiq << job
 
 # create multiple Rubykiq clients with their own drivers
 ruby_client = Rubykiq::Client.new
-hiredis_client = Rubykiq::Client.new(:driver => :hiredis)
+hiredis_client = Rubykiq::Client.new(driver: :hiredis)
 
 # create multiple Rubykiq clients with their own namespaces
-foo_client = Rubykiq::Client.new(:namespace => 'foo')
-bar_client = Rubykiq::Client.new(:namespace => 'bar')
+foo_client = Rubykiq::Client.new(namespace: 'foo')
+bar_client = Rubykiq::Client.new(namespace: 'bar')
 ```
 
 ## Caveats

@@ -16,9 +16,9 @@ require 'rubykiq'
 ## Features / Usage Examples
 
 * [Redis](http://redis.io) has support for [alternative drivers](https://github.com/redis/redis-rb#alternate-drivers), Rubykiq is tested with these in mind. (eg `:synchrony`)
-* the `:class` parameter can be a `Class` or a `String` of a Class (eg push jobs to Sidekiq from anywhere, not just where Sidekiq has the classes loaded)
+* the `:class` parameter can be a `Class` or a `String` of a Class (eg push jobs to Sidekiq from anywhere, not just where you have Sidekiq classes loaded)
 * The `:at` parameter supports `Time`, `Date` and any `Time.parse`-able strings.
-* Pushing multiple and singular jobs has the same interface (simply nest args)
+* Pushing multiple and singular jobs have the same interface (simply nest args)
 * Slightly less gem dependecies, and by that I mean `Sidekiq::Client` without `Celluloid` (which is already very light!)
 * Easier configuration (IMO)
 

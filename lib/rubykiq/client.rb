@@ -1,10 +1,12 @@
 require 'time'
+require 'thread'
 require 'multi_json'
 require 'securerandom'
 require 'connection_pool'
 
 module Rubykiq
   class Client
+
     # An array of valid keys in the options hash when configuring a `Rubykiq::Client`
     VALID_OPTIONS_KEYS = [
       :redis_pool_size,
@@ -48,15 +50,12 @@ module Rubykiq
     # @return [::ConnectionPool]
     def connection_pool(options = {}, &block)
       options = valid_options.merge(options)
-
-      @connection_pool ||= ::ConnectionPool.new(timeout: redis_pool_timeout, size: redis_pool_size) do
-        Rubykiq::Connection.new(options)
-      end
+      initialize_connection_pool(options) unless defined?(@connection_pool)
 
       if block_given?
         @connection_pool.with(&block)
       else
-        return @connection_pool
+        @connection_pool
       end
     end
 
@@ -197,5 +196,16 @@ module Rubykiq
 
       normalized_time
     end
+
+    private
+
+    def initialize_connection_pool(options = {})
+      Thread.exclusive do
+        @connection_pool = ::ConnectionPool.new(timeout: redis_pool_timeout, size: redis_pool_size) do
+          Rubykiq::Connection.new(options)
+        end
+      end
+    end
+
   end
 end

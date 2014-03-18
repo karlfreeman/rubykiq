@@ -14,20 +14,19 @@ module Rubykiq
       url = options.delete(:url) { determine_redis_provider }
       namespace = options.delete(:namespace)
       driver = options.delete(:driver)
-      @redis_connection ||= build_conection(url, namespace, driver)
-      @redis_client ||= @redis_connection.client
+      @redis_connection = initialize_conection(url, namespace, driver)
+      @redis_client = @redis_connection.client
       @redis_connection
     end
 
     private
 
-    # lets try and fallback to another redis url
     def determine_redis_provider
+      # lets try and fallback to another redis url
       ENV['REDISTOGO_URL'] || ENV['REDIS_PROVIDER'] || ENV['REDIS_URL'] || 'redis://localhost:6379/0'
     end
 
-    # construct a namespaced redis connection
-    def build_conection(url, namespace, driver)
+    def initialize_conection(url, namespace, driver)
       client = ::Redis.new(url: url, driver: driver)
       ::Redis::Namespace.new(namespace, redis: client)
     end

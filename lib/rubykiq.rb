@@ -1,3 +1,4 @@
+require 'thread'
 require 'forwardable'
 require 'rubykiq/client'
 require 'rubykiq/connection'
@@ -17,6 +18,15 @@ module Rubykiq
   #
   # @return [Rubykiq::Client]
   def self.client(options = {})
-    @client ||= Rubykiq::Client.new(options)
+    initialize_client(options) unless defined?(@client)
+    @client
+  end
+
+  private
+
+  def self.initialize_client(options = {})
+    Thread.exclusive do
+      @client = Rubykiq::Client.new(options)
+    end
   end
 end

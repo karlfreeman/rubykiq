@@ -6,7 +6,6 @@ require 'connection_pool'
 
 module Rubykiq
   class Client
-
     # An array of valid keys in the options hash when configuring a `Rubykiq::Client`
     VALID_OPTIONS_KEYS = [
       :redis_pool_size,
@@ -206,6 +205,5 @@ module Rubykiq
         end
       end
     end
-
   end
 end

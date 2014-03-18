@@ -3,7 +3,6 @@ require 'hiredis'
 require 'em-synchrony'
 
 describe Rubykiq::Client do
-
   before(:all) { Timecop.freeze }
   after(:all) { Timecop.return }
   let(:ruby_client) { Rubykiq::Client.new(driver: :ruby, namespace: :ruby) }
@@ -12,15 +11,11 @@ describe Rubykiq::Client do
 
   # eg with a variety of drivers
   [:ruby, :hiredis, :synchrony].each do |driver|
-
     # skip incompatible drivers when running in JRuby
     next if jruby? && (driver == :hiredis || :synchrony)
-
     context "using driver '#{driver}'" do
-
       # make sure the let is the current client being tested
       let(:client) { send("#{driver}_client") }
-
       describe :defaults do
         subject { client }
         its(:namespace) { should eq driver }
@@ -30,9 +25,7 @@ describe Rubykiq::Client do
       end
 
       describe :push do
-
         context :validations do
-
           context 'with an incorrect message type' do
             it 'raises an ArgumentError' do
               expect { client.push([]) }.to raise_error(ArgumentError, /Message must be a Hash/)
@@ -58,19 +51,14 @@ describe Rubykiq::Client do
               expect { client.push(class: Class, args: ['foo', 1, { bat: 'bar' }]) }.to raise_error(ArgumentError, /Message class must be a String representation of the class name/)
             end
           end
-
         end
 
         # eg singular and batch
         arguments = [[{ bat: 'bar' }], [[{ bat: 'bar' }], [{ bat: 'foo' }]]]
         arguments.each do |args|
-
           context "with args #{args}" do
-
             it "should create #{args.length} job(s)" do
-
               wrap_in_synchrony?(driver) do
-
                 client.connection_pool do |connection|
                   connection.flushdb
                 end
@@ -84,21 +72,15 @@ describe Rubykiq::Client do
                   job = MultiJson.decode(job, symbolize_keys: true)
                   expect(job).to have_key(:jid)
                 end
-
               end
-
             end
 
             # eg with a variety of different time types
             times = [Time.now, DateTime.now, Time.now.utc.iso8601, Time.now.to_f]
             times.each do |time|
-
               context "with time #{time} (#{time.class})" do
-
                 it "should create #{args.length} job(s)" do
-
                   wrap_in_synchrony?(driver) do
-
                     client.connection_pool do |connection|
                       connection.flushdb
                     end
@@ -113,23 +95,13 @@ describe Rubykiq::Client do
                       expect(job).to have_key(:at)
                       expect(job[:at]).to be_within(1).of(Time.now.to_f)
                     end
-
                   end
-
                 end
-
               end
-
             end
-
           end
-
         end
-
       end
-
     end
-
   end
-
 end

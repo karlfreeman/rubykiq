@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Rubykiq::Connection do
-
   describe :defaults do
     subject { Rubykiq::Connection.new }
     its(:namespace) { should be_nil }
@@ -12,7 +11,6 @@ describe Rubykiq::Connection do
   end
 
   describe :options do
-
     context :custom do
       subject { Rubykiq::Connection.new(namespace: 'yyy') }
       its(:namespace) { should eq 'yyy' }
@@ -26,12 +24,10 @@ describe Rubykiq::Connection do
         end
       end
     end
-
   end
 
   describe :env do
     subject { Rubykiq::Connection.new }
-
     [{ name: 'REDISTOGO_URL', value: 'redistogo' }, { name: 'REDIS_PROVIDER', value: 'redisprovider' }, { name: 'REDIS_URL', value: 'redisurl' }].each do | test_case |
       context "with ENV[#{test_case[:name]}]" do
         before do
@@ -43,7 +39,5 @@ describe Rubykiq::Connection do
         its(:host) { should eq test_case[:value] }
       end
     end
-
   end
-
 end

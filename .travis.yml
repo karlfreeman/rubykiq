@@ -22,3 +22,5 @@ notifications:
   email: false
 services:
   - redis-server
+env:
+  - CODECLIMATE_REPO_TOKEN=04a9fef09063cdef2f62cf46531329ad01a9383e3de8270e112480052774f676

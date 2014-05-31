@@ -69,6 +69,7 @@ bar_client = Rubykiq::Client.new(namespace: 'bar')
 [![Gem Version](http://img.shields.io/gem/v/rubykiq.svg)][gem]
 [![Build Status](http://img.shields.io/travis/karlfreeman/rubykiq.svg)][travis]
 [![Code Quality](http://img.shields.io/codeclimate/github/karlfreeman/rubykiq.svg)][codeclimate]
+[![Code Coverage](http://img.shields.io/codeclimate/coverage/github/karlfreeman/rubykiq.svg)][codeclimate]
 [![Gittip](http://img.shields.io/gittip/karlfreeman.svg)][gittip]
 
 ## Supported Redis Drivers

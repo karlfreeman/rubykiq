@@ -8,6 +8,7 @@ gem 'em-synchrony'
 group :test do
   gem 'rake', '~> 10.0'
   gem 'rspec'
+  gem 'rspec-its'
   gem 'timecop'
   gem 'codeclimate-test-reporter'
 end

@@ -20,7 +20,7 @@ describe Rubykiq::Client do
         subject { client }
         its(:namespace) { should eq driver }
         its(:driver) { should be driver }
-        its(:retry) { should be_true }
+        its(:retry) { should eq true }
         its(:queue) { should eq 'default' }
       end
 

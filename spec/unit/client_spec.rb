@@ -71,6 +71,7 @@ describe Rubykiq::Client do
                 raw_jobs.each do |job|
                   job = MultiJson.decode(job, symbolize_keys: true)
                   expect(job).to have_key(:jid)
+                  expect(job[:enqueued_at]).to be_within(1).of(Time.now.to_f)
                 end
               end
             end

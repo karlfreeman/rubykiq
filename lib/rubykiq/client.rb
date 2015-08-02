@@ -176,6 +176,9 @@ module Rubykiq
       # provide a job ID
       pre_normalized_item[:jid] = ::SecureRandom.hex(12)
 
+      # Sidekiq::Queue#latency (used in sidekiq web), requires `enqueued_at`
+      pre_normalized_item[:enqueued_at] = Time.now.to_f
+
       pre_normalized_item
     end
 

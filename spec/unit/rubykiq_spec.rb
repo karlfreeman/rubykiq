@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe Rubykiq do
-
-
   describe :client do
     it 'should return a Client' do
       expect(Rubykiq.client).to be_kind_of(Rubykiq::Client)
@@ -34,5 +32,4 @@ describe Rubykiq do
       it { should respond_to "#{key}=".to_sym }
     end
   end
-
 end

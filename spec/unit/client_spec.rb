@@ -59,15 +59,13 @@ describe Rubykiq::Client do
           context "with args #{args}" do
             it "should create #{args.length} job(s)" do
               wrap_in_synchrony?(driver) do
-                client.connection_pool do |connection|
-                  connection.flushdb
-                end
+                client.connection_pool(&:flushdb)
 
                 expect { client.push(class: 'MyWorker', args: args) }.to change {
-                  client.connection_pool do |connection| connection.llen('queue:default'); end
+                  client.connection_pool { |connection| connection.llen('queue:default'); }
                 }.from(0).to(args.length)
 
-                raw_jobs = client.connection_pool do |connection| connection.lrange('queue:default', 0, args.length); end
+                raw_jobs = client.connection_pool { |connection| connection.lrange('queue:default', 0, args.length); }
                 raw_jobs.each do |job|
                   job = MultiJson.decode(job, symbolize_keys: true)
                   expect(job).to have_key(:jid)
@@ -82,15 +80,13 @@ describe Rubykiq::Client do
               context "with time #{time} (#{time.class})" do
                 it "should create #{args.length} job(s)" do
                   wrap_in_synchrony?(driver) do
-                    client.connection_pool do |connection|
-                      connection.flushdb
-                    end
+                    client.connection_pool(&:flushdb)
 
                     expect { client.push(class: 'MyWorker', args: args, at: time) }.to change {
-                      client.connection_pool do |connection| connection.zcard('schedule'); end
+                      client.connection_pool { |connection| connection.zcard('schedule'); }
                     }.from(0).to(args.length)
 
-                    raw_jobs = client.connection_pool do |connection| connection.zrange('schedule', 0, args.length); end
+                    raw_jobs = client.connection_pool { |connection| connection.zrange('schedule', 0, args.length); }
                     raw_jobs.each do |job|
                       job = MultiJson.decode(job, symbolize_keys: true)
                       expect(job).to have_key(:at)

@@ -4,8 +4,7 @@ Next Release
 
 1.0.2 (02/08/2015)
 ==================
-* [Include `enqueued_at` in payload](https://github.com/karlfreeman/rubykiq/commit/0a68c9dc670f94efe8a344869db0b7ba4a97d1d7) - [@amiel](https://github.com/karlfreeman).
-
+* [Include `enqueued_at` in payload](https://github.com/karlfreeman/rubykiq/pull/2) - [@amiel](https://github.com/amiel).
 
 1.0.1 (18/03/2014)
 ==================

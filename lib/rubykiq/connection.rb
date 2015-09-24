@@ -11,10 +11,9 @@ module Rubykiq
     #
     # @param options [Hash]
     def initialize(options = {})
-      url = options.delete(:url) { determine_redis_provider }
+      options[:url] ||= determine_redis_provider
       namespace = options.delete(:namespace)
-      driver = options.delete(:driver)
-      @redis_connection = initialize_conection(url, namespace, driver)
+      @redis_connection = initialize_conection(options, namespace)
       @redis_client = @redis_connection.client
       @redis_connection
     end
@@ -26,8 +25,8 @@ module Rubykiq
       ENV['REDISTOGO_URL'] || ENV['REDIS_PROVIDER'] || ENV['REDIS_URL'] || 'redis://localhost:6379/0'
     end
 
-    def initialize_conection(url, namespace, driver)
-      client = ::Redis.new(url: url, driver: driver)
+    def initialize_conection(options, namespace)
+      client = ::Redis.new(options)
       ::Redis::Namespace.new(namespace, redis: client)
     end
   end

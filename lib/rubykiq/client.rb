@@ -12,6 +12,9 @@ module Rubykiq
       :redis_pool_timeout,
       :url,
       :namespace,
+      :sentinels,
+      :role,
+      :master_name,
       :driver,
       :retry,
       :queue
@@ -23,6 +26,9 @@ module Rubykiq
       redis_pool_timeout: 1,
       url: nil,
       namespace: nil,
+      sentinels: [],
+      role: :master,
+      master_name: nil,
       driver: :ruby,
       retry: true,
       queue: 'default'
@@ -49,6 +55,7 @@ module Rubykiq
     # @return [::ConnectionPool]
     def connection_pool(options = {}, &block)
       options = valid_options.merge(options)
+      options.delete(:sentinels) if options[:sentinels].empty?
       initialize_connection_pool(options) unless defined?(@connection_pool)
 
       if block_given?

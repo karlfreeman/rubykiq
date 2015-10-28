@@ -26,6 +26,10 @@ require 'rubykiq'
 # will also detect REDIS_URL, REDIS_PROVIDER and REDISTOGO_URL ENV variables
 Rubykiq.url = 'redis://127.0.0.1:6379'
 
+# sentinels support
+Rubykiq.sentinels = [{:host => "127.0.0.1", :port => 26380}, {:host => "127.0.0.1", :port => 26381}]
+Rubykiq.role = :master # default
+
 # alternative driver support ( :ruby, :hiredis, :synchrony )
 Rubykiq.driver = :synchrony
 

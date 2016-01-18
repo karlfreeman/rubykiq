@@ -6,6 +6,8 @@ require 'rubykiq/connection'
 module Rubykiq
   extend SingleForwardable
 
+  MUTEX_FOR_PERFORM = Mutex.new
+
   def_delegators :client, :<<, :push, :connection_pool, :connection_pool=
 
   # delegate all VALID_OPTIONS_KEYS accessors to the client
@@ -25,7 +27,7 @@ module Rubykiq
   private
 
   def self.initialize_client(options = {})
-    Thread.exclusive do
+    MUTEX_FOR_PERFORM.synchronize do
       @client = Rubykiq::Client.new(options)
     end
   end

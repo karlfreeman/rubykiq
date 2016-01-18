@@ -28,6 +28,8 @@ module Rubykiq
       queue: 'default'
     }
 
+    MUTEX_FOR_PERFORM = Mutex.new
+
     # Bang open the valid options
     attr_accessor(*VALID_OPTIONS_KEYS)
 
@@ -202,7 +204,7 @@ module Rubykiq
     private
 
     def initialize_connection_pool(options = {})
-      Thread.exclusive do
+      MUTEX_FOR_PERFORM.synchronize do
         @connection_pool = ::ConnectionPool.new(timeout: redis_pool_timeout, size: redis_pool_size) do
           Rubykiq::Connection.new(options)
         end
